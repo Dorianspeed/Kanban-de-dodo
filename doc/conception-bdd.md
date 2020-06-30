@@ -1,4 +1,4 @@
-# Conception de l'application
+# Conception de la BDD
 
 ## Analyse des entités
 
@@ -119,4 +119,15 @@ Elaborer, 0N User, 11 Tag
 User: id, first_name, last_name, email, password
 Construire, 0N User, 11 Table
 Table: id, name, background_color
+```
+
+## MLD qui en découle
+
+```text
+user(id, first_name, last_name, email, password)
+table(id, name, background_color, #user(id))
+list(id, name, position, #user(id), #table(id))
+card(id, name, position, background_color, text_color, #user(id), #list(id))
+tag(id, name, background_color, text_color, #user(id))
+Définir(#card(id), #tag(id))
 ```
