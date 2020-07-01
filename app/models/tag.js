@@ -1,12 +1,12 @@
-const { Datatypes, Model } = require('sequelize');
+const { DataTypes, Model } = require('sequelize');
 const sequelize = require('../database');
 
 class Tag extends Model {};
 
 Tag.init({
-    name: Datatypes.TEXT,
-    background_color: Datatypes.TEXT,
-    text_color: Datatypes.TEXT
+    name: DataTypes.TEXT,
+    background_color: DataTypes.TEXT,
+    text_color: DataTypes.TEXT
 }, {
     sequelize,
     tableName: "tag"

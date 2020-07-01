@@ -1,5 +1,11 @@
-const { User, Table, List, Card, Tag } = require('../models');
+const User = require('./user');
+const Table = require('./table');
+const List = require('./list');
+const Card = require('./card');
+const Tag = require('./tag');
 
+
+// Associations pour la class User
 User.hasMany(Table, {
     foreignKey: 'user_id',
     as: 'tables'
@@ -40,16 +46,20 @@ Tag.belongsTo(User, {
     as: 'user'
 });
 
+
+// Associations pour la class Table
 Table.hasMany(List, {
     foreignKey: 'table_id',
     as: 'lists'
 });
 
-List.belongs(Table, {
+List.belongsTo(Table, {
     foreignKey: 'table_id',
     as: 'table'
 });
 
+
+// Associations pour la class List
 List.hasMany(Card, {
     foreignKey: 'list_id',
     as: 'cards'
@@ -60,6 +70,8 @@ Card.belongsTo(List, {
     as: 'list'
 });
 
+
+// Associations sur la relation Card <--> Tag
 Card.belongsToMany(Tag, {
     through: 'card_has_tag',
     foreignKey: 'card_id',

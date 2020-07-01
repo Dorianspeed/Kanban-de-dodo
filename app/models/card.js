@@ -1,13 +1,13 @@
-const { Datatypes, Model } = require('sequelize');
+const { DataTypes, Model } = require('sequelize');
 const sequelize = require('../database');
 
 class Card extends Model {};
 
 Card.init({
-    name: Datatypes.TEXT,
-    position: Datatypes.INTEGER,
-    background_color: Datatypes.TEXT,
-    text_color: Datatypes.TEXT
+    name: DataTypes.TEXT,
+    position: DataTypes.INTEGER,
+    background_color: DataTypes.TEXT,
+    text_color: DataTypes.TEXT
 }, {
     sequelize,
     tableName: "card"

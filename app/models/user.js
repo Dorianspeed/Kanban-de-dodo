@@ -1,13 +1,13 @@
-const { Datatypes, Model } = require('sequelize');
+const { DataTypes, Model } = require('sequelize');
 const sequelize = require('../database');
 
 class User extends Model {};
 
 User.init({
-    first_name: Datatypes.TEXT,
-    last_name: Datatypes.TEXT,
-    email: Datatypes.TEXT,
-    password: Datatypes.TEXT
+    first_name: DataTypes.TEXT,
+    last_name: DataTypes.TEXT,
+    email: DataTypes.TEXT,
+    password: DataTypes.TEXT
 }, {
     sequelize,
     tableName: "user"

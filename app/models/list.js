@@ -1,11 +1,11 @@
-const { Datatypes, Model } = require('sequelize');
+const { DataTypes, Model } = require('sequelize');
 const sequelize = require('../database');
 
 class List extends Model {};
 
 List.init({
-    name: Datatypes.TEXT,
-    position: Datatypes.INTEGER
+    name: DataTypes.TEXT,
+    position: DataTypes.INTEGER
 }, {
     sequelize,
     tableName: "list"
