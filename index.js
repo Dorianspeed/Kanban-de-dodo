@@ -3,12 +3,12 @@ const express = require('express');
 const router = require('./app/router');
 
 const app = express();
-const port = process.env.PORT || 5050;
+const PORT = process.env.PORT || 5050;
 
 app.use(express.urlencoded({ extended: true }));
 
 app.use(router);
 
-app.listen(port, () => {
-    console.log(`Listening on ${port}`);
+app.listen(PORT, () => {
+    console.log(`Listening on ${PORT}`);
 });
