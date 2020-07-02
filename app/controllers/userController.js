@@ -30,12 +30,16 @@ const userController = {
                 include: ['tables', 'lists', 'cards', 'tags']
             });
 
-            response.status(200).json(user);
+            if (user) {
+                response.status(200).json(user);
+            } else {
+                response.status(404).json(`L'utilisateur avec l'id ${userId} n'existe pas`);                
+            }
         }
 
         catch (error) {
             console.trace(error);
-            response.status(404).json(`L'utilisateur avec l'id ${userId} n'existe pas`);
+            response.status(500).json(error);
         }
     },
 
@@ -274,6 +278,33 @@ const userController = {
         catch (error) {
             console.trace(error);
             response.status(500).json(error);
+        }
+    },
+
+    deleteUser: async (request, response) => {
+        try {
+            // On parse l'id reçu en un nombre entier
+            const userId = parseInt(request.params.id, 10);
+
+            // On vérifie que l'id est bien de type number
+            if (isNaN(userId)) {
+                response.status(400).json('L\'id spécifié doit être de type number');
+                return;
+            }
+
+            const user = await User.findByPk(userId);
+
+            if (user) {
+                await user.destroy();
+                response.status(200).json('L\'utilisateur a bien été supprimé');
+            } else {
+                response.status(404).json(`L'utilisateur avec l'id ${userId} n'existe pas`);
+            }
+        }
+
+        catch (error) {
+            console.trace(error);
+            response.status(400).json(error);
         }
     }
 };
