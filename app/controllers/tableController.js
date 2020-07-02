@@ -68,6 +68,7 @@ const tableController = {
         }
     },
 
+    //! Méthode à vérifier, gros doute sur la fonctionnalité !
     getOneTableFromOneUser: async (request, response) => {
         try {
             // On parse les id reçus en nombres entiers
@@ -122,7 +123,7 @@ const tableController = {
             // On vérifie que les champs sont bien valides
             if (name) {
                 if (!validator.isAlphanumeric(name)) {
-                    bodyErrors.push('Le champ nom ne doit que des lettres et nombres');
+                    bodyErrors.push('Le champ nom ne doit contenir que des lettres et nombres');
                 }
             }
 
@@ -168,6 +169,7 @@ const tableController = {
             const table = await Table.findByPk(tableId);
             if (!table) {
                 response.status(404).json(`Le tableau avec l'id ${tableId} n'existe pas`);
+                return;
             }
 
             // On déstructure le formulaire reçu
@@ -179,7 +181,7 @@ const tableController = {
             // On vérifie que les champs sont bien valides
             if (name) {
                 if (!validator.isAlphanumeric(name)) {
-                    bodyErrors.push('Le champ nom ne doit que contenir que des lettres et nombres');
+                    bodyErrors.push('Le champ nom ne doit contenir que des lettres et nombres');
                 }
             }
 
