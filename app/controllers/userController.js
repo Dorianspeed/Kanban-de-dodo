@@ -216,6 +216,65 @@ const userController = {
             console.trace(error);
             response.status(500).json(error);
         }
+    },
+
+    createOrUpdate: async (request, response) => {
+        try {
+            // On stocke dans une variable le formulaire reçu
+            const posts = request.body;
+
+            // On prépare un tableau avec les champs autorisés
+            const authorizedPosts = [
+                'first_name',
+                'last_name',
+                'email',
+                'password',
+            ];
+
+            // On initialise un tableau d'erreurs vide
+            const bodyErrors = [];
+
+            // On boucle sur tous les champs reçus dans le formulaire
+            // Si le champ n'est pas autorisé, on envoit une erreur
+            for (const post in posts) {
+                if (!authorizedPosts.includes(post)) {
+                    bodyErrors.push(`Le champ ${post} n'existe pas`);
+                }
+            }
+
+            // Si on reçoit un id, on vérifie que celui-ci est bien de type number
+            if (request.params.id) {
+                if (isNaN(parseInt(request.params.id, 10))) {
+                    bodyErrors.push('L\'id spécifié doit être de type number');
+                }
+            }
+
+            // On envoie le tableau en cas d'erreurs
+            if (bodyErrors.length) {
+                response.status(400).json(bodyErrors);
+                return;
+            }
+
+            // On initialise une variable utilisateur vide
+            let user;
+            
+            // Si on reçoit un id, on va récupérer l'utilisateur
+            if (request.params.id) {
+                user = await User.findByPk(request.params.id)
+            }
+
+            // S'il y a un utilisateur existant, on le modifie, sinon on le crée
+            if (user) {
+                await userController.updateOneUser(request, response);
+            } else {
+                await userController.createUser(request, response);
+            }
+        }
+
+        catch (error) {
+            console.trace(error);
+            response.status(500).json(error);
+        }
     }
 };
 
