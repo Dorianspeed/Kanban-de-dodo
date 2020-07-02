@@ -138,6 +138,7 @@ const userController = {
                 return;
             }
 
+            // On vérifie que l'id de l'utilisateur existe en BDD
             const user = await User.findByPk(userId);
             if (!user) {
                 response.status(404).json(`L'utilisateur avec l'id ${userId} n'existe pas`);
@@ -232,14 +233,14 @@ const userController = {
                 'first_name',
                 'last_name',
                 'email',
-                'password',
+                'password'
             ];
 
-            // On initialise un tableau d'erreurs vide
+            // On initialise un tableau d'erreurs
             const bodyErrors = [];
 
             // On boucle sur tous les champs reçus dans le formulaire
-            // Si le champ n'est pas autorisé, on envoit une erreur
+            // Si le champ n'est pas autorisé, on envoie une erreur
             for (const post in posts) {
                 if (!authorizedPosts.includes(post)) {
                     bodyErrors.push(`Le champ ${post} n'existe pas`);
@@ -259,7 +260,7 @@ const userController = {
                 return;
             }
 
-            // On initialise une variable utilisateur vide
+            // On initialise une variable utilisateur
             let user;
             
             // Si on reçoit un id, on va récupérer l'utilisateur
@@ -304,7 +305,7 @@ const userController = {
 
         catch (error) {
             console.trace(error);
-            response.status(400).json(error);
+            response.status(500).json(error);
         }
     }
 };
