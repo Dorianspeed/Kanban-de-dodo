@@ -26,7 +26,7 @@ CREATE TABLE "table" (
     "id" INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     "name" TEXT NOT NULL,
     "background_color" TEXT NOT NULL,
-    "user_id" INTEGER NOT NULL REFERENCES "user"("id"),
+    "user_id" INTEGER NOT NULL REFERENCES "user"("id") ON DELETE CASCADE,
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     "updated_at" TIMESTAMPTZ
 );
@@ -37,7 +37,7 @@ CREATE TABLE "list" (
     "id" INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     "name" TEXT NOT NULL,
     "position" INTEGER NOT NULL,
-    "user_id" INTEGER NOT NULL REFERENCES "user"("id"),
+    "user_id" INTEGER NOT NULL REFERENCES "user"("id") ON DELETE CASCADE,
     "table_id" INTEGER NOT NULL REFERENCES "table"("id") ON DELETE CASCADE,
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     "updated_at" TIMESTAMPTZ
@@ -51,7 +51,7 @@ CREATE TABLE "card" (
     "position" INTEGER NOT NULL,
     "background_color" TEXT NOT NULL,
     "text_color" TEXT NOT NULL,
-    "user_id" INTEGER NOT NULL REFERENCES "user"("id"),
+    "user_id" INTEGER NOT NULL REFERENCES "user"("id") ON DELETE CASCADE,
     "list_id" INTEGER NOT NULL REFERENCES list("id") ON DELETE CASCADE,
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     "updated_at" TIMESTAMPTZ
@@ -64,7 +64,7 @@ CREATE TABLE "tag" (
     "name" TEXT NOT NULL,
     "background_color" TEXT NOT NULL,
     "text_color" TEXT NOT NULL,
-    "user_id" INTEGER NOT NULL REFERENCES "user"("id"),
+    "user_id" INTEGER NOT NULL REFERENCES "user"("id") ON DELETE CASCADE,
     "created_at" TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     "updated_at" TIMESTAMPTZ
 );
