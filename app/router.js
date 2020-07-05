@@ -34,7 +34,7 @@ router.post('/lists', listController.createList);
 router.get('/lists/:id', listController.getOneList);
 router.patch('/lists/:id', listController.updateOneList);
 router.put('/lists/:id?', listController.createOrUpdate);
-router.delete('/lists/:id', listController.deleteTable);
+router.delete('/lists/:id', listController.deleteList);
 
 // Card
 router.get('/cards', cardController.getAllCards);

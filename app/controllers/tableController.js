@@ -71,7 +71,7 @@ const tableController = {
     createTable: async (request, response) => {
         try {
             // On déstructure le formulaire reçu
-            const { name, background_color } = request.body;
+            const { name, background_color, user_id } = request.body;
 
             // On initialise un tableau d'erreurs
             const bodyErrors = [];
@@ -83,6 +83,10 @@ const tableController = {
 
             if (!background_color) {
                 bodyErrors.push('Le champ couleur de fond ne peut être vide');
+            }
+
+            if (!user_id) {
+                bodyErrors.push('Le champ id de l\'utilisateur ne peut être vide');
             }
 
             // On vérifie que les champs sont bien valides
@@ -98,6 +102,12 @@ const tableController = {
                 }
             }
 
+            if(user_id) {
+                if (isNaN(parseInt(user_id, 10))) {
+                    bodyErrors.push('Le champ id de l\'utilisateur doit être de type number');
+                }
+            }
+
             // On envoie le tableau en cas d'erreurs
             if (bodyErrors.length) {
                 response.status(400).json(bodyErrors);
@@ -107,7 +117,8 @@ const tableController = {
             // On crée le nouveau tableau
             const newTable = await Table.create({
                 name,
-                background_color
+                background_color,
+                user_id
             });
 
             response.status(201).json(newTable);
@@ -138,7 +149,7 @@ const tableController = {
             }
 
             // On déstructure le formulaire reçu
-            const { name, background_color } = request.body;
+            const { name, background_color, user_id } = request.body;
 
             // On initialise le tableau d'erreurs
             const bodyErrors = [];
@@ -153,6 +164,12 @@ const tableController = {
             if (background_color) {
                 if (!validator.isHexColor(background_color)) {
                     bodyErrors.push('Le champ couleur de fond doit respecter le format hexadécimal');
+                }
+            }
+
+            if (user_id) {
+                if (isNaN(parseInt(user_id, 10))) {
+                    bodyErrors.push('Le champ id de l\'utilisateur doit être de type number');
                 }
             }
 
@@ -190,7 +207,8 @@ const tableController = {
             // On prépare un tableau avec les champs autorisés
             const authorizedPosts = [
                 'name',
-                'background_color'
+                'background_color',
+                'user_id'
             ];
 
             // On initialise un tableau d'erreurs

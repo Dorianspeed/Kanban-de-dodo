@@ -43,7 +43,7 @@ const cardController = {
     createCard: async (request, response) => {
         try {
             // On déstructure le formulaire reçu
-            const { name, position, background_color, text_color } = request.body;
+            const { name, position, background_color, text_color, user_id, list_id } = request.body;
 
             // On initialise un tableau d'erreurs
             const bodyErrors = [];
@@ -63,6 +63,14 @@ const cardController = {
 
             if (!text_color) {
                 bodyErrors.push('Le champ couleur de texte ne peut être vide');
+            }
+
+            if (!user_id) {
+                bodyErrors.push('Le champ id de l\'utilisateur ne peut être vide');
+            }
+
+            if (!list_id) {
+                bodyErrors.push('Le champ id de liste ne peut être vide');
             }
 
             // On vérifie que les champs sont bien valides
@@ -90,6 +98,18 @@ const cardController = {
                 }
             }
 
+            if (user_id) {
+                if (isNaN(parseInt(user_id, 10))) {
+                    bodyErrors.push('Le champ id de l\'utilisateur doit être de type number');
+                }
+            }
+
+            if (list_id) {
+                if (isNaN(parseInt(list_id, 10))) {
+                    bodyErrors.push('Le champ id de liste doit être de type number');
+                }
+            }
+
             // On envoie le tableau en cas d'erreurs
             if (bodyErrors.length) {
                 response.status(400).json(bodyErrors);
@@ -101,7 +121,9 @@ const cardController = {
                 name,
                 position,
                 background_color,
-                text_color
+                text_color,
+                user_id,
+                list_id
             });
 
             response.status(201).json(newCard);
@@ -132,7 +154,7 @@ const cardController = {
             }
 
             // On déstructure le formulaire reçu
-            const { name, position, background_color, text_color } = request.body;
+            const { name, position, background_color, text_color, user_id, list_id } = request.body;
 
             // On initialise le tableau d'erreurs
             const bodyErrors = [];
@@ -162,6 +184,18 @@ const cardController = {
                 }
             }
 
+            if (user_id) {
+                if (isNaN(parseInt(user_id, 10))) {
+                    bodyErrors.push('Le champ id de l\'utilisateur doit être de type number');
+                }
+            }
+
+            if (list_id) {
+                if (isNaN(parseInt(list_id, 10))) {
+                    bodyErrors.push('Le champ id de liste doit être de type number');
+                }
+            }
+
             // On envoie le tableau en cas d'erreurs
             if (bodyErrors.length) {
                 response.status(400).json(bodyErrors);
@@ -183,6 +217,14 @@ const cardController = {
 
             if (text_color) {
                 card.text_color = text_color;
+            }
+
+            if (user_id) {
+                card.user_id = user_id;
+            }
+
+            if (list_id) {
+                card.list_id = list_id;
             }
 
             // On enregistre les nouvelles données
@@ -207,7 +249,9 @@ const cardController = {
                 'name',
                 'position',
                 'background_color',
-                'text_color'
+                'text_color',
+                'user_id',
+                'list_id'
             ];
 
             // On initialise un tableau d'erreurs

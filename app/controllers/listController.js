@@ -42,7 +42,7 @@ const listController = {
     createList: async (request, response) => {
         try {
             // On déstructure le formulaire reçu
-            const { name, position } = request.body;
+            const { name, position, user_id, table_id } = request.body;
 
             // On initialise un tableau d'erreurs
             const bodyErrors = [];
@@ -54,6 +54,14 @@ const listController = {
 
             if (!position) {
                 bodyErrors.push('Le champ position ne peut être vide');
+            }
+
+            if (!user_id) {
+                bodyErrors.push('Le champ id de l\'utilisateur ne peut être vide');
+            }
+
+            if (!table_id) {
+                bodyErrors.push('Le champ id de la table ne peut être vide');
             }
 
             // On vérifie que les champs sont bien valides
@@ -69,6 +77,18 @@ const listController = {
                 }
             }
 
+            if (user_id) {
+                if (isNaN(parseInt(user_id, 10))) {
+                    bodyErrors.push('Le champ id de l\'utilisateur doit être de type number');
+                }
+            }
+
+            if (table_id) {
+                if (isNaN(parseInt(table_id, 10))) {
+                    bodyErrors.push('Le champ id de la table doit être de type number')
+                }
+            }
+
             // On envoie le tableau en cas d'erreurs
             if (bodyErrors.length) {
                 response.status(400).json(bodyErrors);
@@ -78,7 +98,9 @@ const listController = {
             // On crée la nouvelle liste
             const newList = await List.create({
                 name,
-                position
+                position,
+                user_id,
+                table_id
             });
 
             response.status(201).json(newList);
@@ -109,7 +131,7 @@ const listController = {
             }
 
             // On déstructure le formulaire reçu
-            const { name, position } = request.body;
+            const { name, position, user_id, table_id } = request.body;
 
             // On initialise le tableau d'erreurs
             const bodyErrors = [];
@@ -127,6 +149,18 @@ const listController = {
                 }
             }
 
+            if (user_id) {
+                if (isNaN(parseInt(user_id, 10))) {
+                    bodyErrors.push('Le champ id de l\'utilisateur doit être de type number');
+                }
+            }
+
+            if (table_id) {
+                if (isNaN(parseInt(table_id, 10))) {
+                    bodyErrors.push('Le champ id de la table doit être de type number')
+                }
+            }
+
             // On envoie le tableau en cas d'erreurs
             if (bodyErrors.length) {
                 response.status(400).json(bodyErrors);
@@ -140,6 +174,14 @@ const listController = {
 
             if (position) {
                 list.position = position;
+            }
+
+            if (user_id) {
+                list.user_id = user_id;
+            }
+
+            if (table_id) {
+                list.table_id = table_id;
             }
 
             // On enregistre les nouvelles données
@@ -162,7 +204,9 @@ const listController = {
             // On prépare un tableau avec les champs autorisés
             const authorizedPosts = [
                 'name',
-                'position'
+                'position',
+                'user_id',
+                'table_id'
             ];
 
             // On initialise un tableau d'erreurs
@@ -211,7 +255,7 @@ const listController = {
         }
     },
     
-    deleteTable: async (request, response) => {
+    deleteList: async (request, response) => {
         try {
             // On parse l'id reçu en un nombre entier
             const listId = parseInt(request.params.id, 10);
