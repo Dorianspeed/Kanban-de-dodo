@@ -42,13 +42,12 @@ const tableController = {
 
     getAllTablesFromOneUser: async (request, response) => {
         try {
-            // On parse l'id reçu en nombre entier
-            const userId = parseInt(request.params.id, 10);
+            // On récupère l'id stocké en locals
+            const userId = localStorage.user.id;
 
-            // On vérifie que l'id est bien de type number
-            if (isNaN(userId)) {
+            // On vérifie que c'est bien un number
+            if (isNaN(parseInt(userId, 10))) {
                 response.status(400).json('L\'id spécifié doit être de type number');
-                return;
             }
 
             const user = User.findByPk(userId, {

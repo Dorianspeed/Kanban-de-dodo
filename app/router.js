@@ -18,7 +18,7 @@ router.patch('/users/:id', userController.updateOneUser);
 router.put('/users/:id?', userController.createOrUpdate);
 router.delete('/users/:id', userController.deleteUser);
 
-router.get('/users/:id/tables', tableController.getAllTablesFromOneUser);
+router.get('/users/tables', tableController.getAllTablesFromOneUser);
 
 // Table
 router.get('/tables', tableController.getAllTables);

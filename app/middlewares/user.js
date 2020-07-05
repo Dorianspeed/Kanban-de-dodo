@@ -1,8 +1,8 @@
 const userMiddleware = (request, response, next) => {
     if (request.session.user) {
-        response.locals.user = request.session.user;
+        localStorage.user = request.session.user;
     } else {
-        response.locals.user = false;
+        localStorage.user = false;
     }
 
     next();
