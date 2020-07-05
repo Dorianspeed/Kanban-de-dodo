@@ -19,7 +19,7 @@ app.use(session({
     }
 }));
 
-app.user(userMiddleware);
+app.use(userMiddleware);
 app.use(router);
 
 app.listen(PORT, () => {
