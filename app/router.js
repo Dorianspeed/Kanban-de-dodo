@@ -6,6 +6,7 @@ const tableController = require('./controllers/tableController');
 const listController = require('./controllers/listController');
 const cardController = require('./controllers/cardController');
 const tagController = require('./controllers/tagController');
+const loginController = require('./controllers/loginController');
 
 // User
 router.get('/users', userController.getAllUsers);
@@ -56,5 +57,10 @@ router.delete('/tags/:id', tagController.deleteTag);
 
 router.post('/cards/:id/tags', tagController.associateTagToCard);
 router.delete('/cards/:cardId/tags/:tagId', tagController.removeTagFromCard);
+
+// Login / Disconnect
+router.post('/login', loginController.login);
+
+router.get('/disconnect', loginController.disconnect);
 
 module.exports = router;
