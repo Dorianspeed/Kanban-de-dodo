@@ -1,6 +1,6 @@
 const { User } = require('../models');
 const validator = require('validator');
-const bcrypt = requrie('bcrypt');
+const bcrypt = require('bcrypt');
 
 const loginController = {
     login: async (request, response) => {
@@ -60,7 +60,7 @@ const loginController = {
             delete request.session.user.password;
 
             // On redirige vers l'index.html
-            response.redirect('/index.html');
+            response.status(200).json('ok');
         }
 
         catch (error) {

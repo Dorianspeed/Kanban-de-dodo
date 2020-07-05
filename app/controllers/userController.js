@@ -108,7 +108,7 @@ const userController = {
 
             // On crypte le mot de passe reçu avant mise en BDD
             const salt = await bcrypt.genSalt(10);
-            const encryptedPassword = await bcrypt.hash(email, salt);
+            const encryptedPassword = await bcrypt.hash(password, salt);
 
             // On crée le nouvel utilisateur
             const newUser = await User.create({
