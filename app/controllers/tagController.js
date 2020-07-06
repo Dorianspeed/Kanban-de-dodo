@@ -43,7 +43,7 @@ const tagController = {
     createTag: async (request, response) => {
         try {
             // On déstructure le formulaire reçu
-            const { name, background_color, text_color } = request.body;
+            const { name, background_color, text_color, user_id } = request.body;
 
             // On initialise un tableau d'erreurs
             const bodyErrors = [];
@@ -59,6 +59,10 @@ const tagController = {
 
             if (!text_color) {
                 bodyErrors.push('Le champ couleur de texte ne peut être vide');
+            }
+
+            if (!user_id) {
+                bodyErrors.push('Le champ id de l\'utilisateur ne peut être vide');
             }
 
             // On vérifie que les champs sont bien valides
@@ -77,6 +81,12 @@ const tagController = {
             if (text_color) {
                 if (!validator.isHexColor(text_color)) {
                     bodyErrors.push('Le champ couleur de texte doit respecter le format hexadécimal');
+                }
+            }
+
+            if (user_id) {
+                if (isNaN(parseInt(user_id, 10))) {
+                    bodyErrors.push('Le champ id de l\'utilisateur doit être de type number');
                 }
             }
 
