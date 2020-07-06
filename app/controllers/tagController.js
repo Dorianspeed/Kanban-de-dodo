@@ -99,7 +99,8 @@ const tagController = {
             const newTag = await Tag.create({
                 name,
                 background_color,
-                text_color
+                text_color,
+                user_id
             });
 
             response.status(201).json(newTag);
