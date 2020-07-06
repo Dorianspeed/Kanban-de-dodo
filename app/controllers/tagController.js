@@ -306,7 +306,9 @@ const tagController = {
             await card.addTag(tag);
     
             // On récupère la carte dans la BDD qui a subi une mise à jour
-            card = await Card.findByPk(cardId);
+            card = await Card.findByPk(cardId, {
+                include: ['tags']
+            });
     
             response.status(200).json(card);
         }
@@ -352,7 +354,7 @@ const tagController = {
             await card.removeTag(tag);
     
             // On récupère la carte dans la BDD qui a subi une mise à jour
-            card = await Card.findByPk(card);
+            card = await Card.findByPk(cardId);
 
             response.status(200).json(card);
         }
