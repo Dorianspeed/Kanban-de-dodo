@@ -25,7 +25,15 @@ const tableController = {
                return;
            }
 
-           const table = await Table.findByPk(tableId);
+           const table = await Table.findByPk(tableId, {
+               include: [{
+                   association: 'lists',
+                   include: [{
+                       association: 'cards',
+                       include: ['tags']
+                   }]
+               }]
+           });
 
            if (table) {
                response.status(200).json(table);
