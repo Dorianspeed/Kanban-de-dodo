@@ -156,7 +156,7 @@ const tableController = {
             }
 
             // On déstructure le formulaire reçu
-            const { name, background_color, user_id } = request.body;
+            const { name, background_color } = request.body;
 
             // On initialise le tableau d'erreurs
             const bodyErrors = [];
@@ -171,12 +171,6 @@ const tableController = {
             if (background_color) {
                 if (!validator.isHexColor(background_color)) {
                     bodyErrors.push('Le champ couleur de fond doit respecter le format hexadécimal');
-                }
-            }
-
-            if (user_id) {
-                if (isNaN(parseInt(user_id, 10))) {
-                    bodyErrors.push('Le champ id de l\'utilisateur doit être de type number');
                 }
             }
 
@@ -214,8 +208,7 @@ const tableController = {
             // On prépare un tableau avec les champs autorisés
             const authorizedPosts = [
                 'name',
-                'background_color',
-                'user_id'
+                'background_color'
             ];
 
             // On initialise un tableau d'erreurs

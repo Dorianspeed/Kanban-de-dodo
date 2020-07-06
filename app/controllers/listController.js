@@ -131,7 +131,7 @@ const listController = {
             }
 
             // On déstructure le formulaire reçu
-            const { name, position, user_id, table_id } = request.body;
+            const { name, position, table_id } = request.body;
 
             // On initialise le tableau d'erreurs
             const bodyErrors = [];
@@ -146,12 +146,6 @@ const listController = {
             if (position) {
                 if (isNaN(parseInt(position, 10))) {
                     bodyErrors.push('Le champ position doit être de type number');
-                }
-            }
-
-            if (user_id) {
-                if (isNaN(parseInt(user_id, 10))) {
-                    bodyErrors.push('Le champ id de l\'utilisateur doit être de type number');
                 }
             }
 
@@ -174,10 +168,6 @@ const listController = {
 
             if (position) {
                 list.position = position;
-            }
-
-            if (user_id) {
-                list.user_id = user_id;
             }
 
             if (table_id) {
@@ -205,7 +195,6 @@ const listController = {
             const authorizedPosts = [
                 'name',
                 'position',
-                'user_id',
                 'table_id'
             ];
 

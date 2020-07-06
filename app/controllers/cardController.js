@@ -154,7 +154,7 @@ const cardController = {
             }
 
             // On déstructure le formulaire reçu
-            const { name, position, background_color, text_color, user_id, list_id } = request.body;
+            const { name, position, background_color, text_color, list_id } = request.body;
 
             // On initialise le tableau d'erreurs
             const bodyErrors = [];
@@ -181,12 +181,6 @@ const cardController = {
             if (text_color) {
                 if (!validator.isHexColor(text_color)) {
                     bodyErrors.push('Le champ couleur de texte doit respecter le format hexadécimal');
-                }
-            }
-
-            if (user_id) {
-                if (isNaN(parseInt(user_id, 10))) {
-                    bodyErrors.push('Le champ id de l\'utilisateur doit être de type number');
                 }
             }
 
@@ -219,10 +213,6 @@ const cardController = {
                 card.text_color = text_color;
             }
 
-            if (user_id) {
-                card.user_id = user_id;
-            }
-
             if (list_id) {
                 card.list_id = list_id;
             }
@@ -250,7 +240,6 @@ const cardController = {
                 'position',
                 'background_color',
                 'text_color',
-                'user_id',
                 'list_id'
             ];
 
