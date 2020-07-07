@@ -46,7 +46,7 @@ const userController = {
     createUser: async (request, response) => {
         try {
             // On déstructure le formulaire reçu
-            const { first_name, last_name, email, password } = request.body;
+            const { first_name, last_name, email, password, confirmedPassword } = request.body;
 
             // On initialise un tableau d'erreurs
             const bodyErrors = [];
@@ -68,6 +68,10 @@ const userController = {
                 bodyErrors.push('Le champ mot de passe ne peut être vide');
             }
 
+            if (!confirmedPassword) {
+                bodyErrors.push('Le champ confirmation du mot de passe ne peut être vide');
+            }
+
             // On vérifie que les champs first_name et last_name ne contiennent que des lettres
             if (first_name) {
                 if (validator.blacklist(first_name, '^\<|\>|\/|\&')) {
@@ -86,6 +90,13 @@ const userController = {
                 if (!validator.isEmail(email)) {
                     bodyErrors.push('Le champ email doit être valide');
                 }                
+            }
+
+            // On vérifie que le mot de passe et sa confirmation matchent
+            if (password && confirmedPassword) {
+                if (password !== confirmedPassword) {
+                    bodyErrors.push('Les champs mot de passe et confirmation du mot de passe ne concordent pas');
+                }
             }
 
             // On envoie le tableau en cas d'erreurs
