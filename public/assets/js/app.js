@@ -318,6 +318,11 @@ const app = {
                 app.makeAddTagListInDOM(tag.id, tag.name);
                 app.makeEditTagListInDOM(tag.id, tag.name, tag.background_color, tag.text_color);
                 app.makeDeleteTagListInDOM(tag.id, tag.name);
+
+                let form = document.querySelector('#addTagModal form');
+                form.querySelector('input[name="name"]').value = '';
+                form.querySelector('input[name="background_color"]').value = '#FFFFFF';
+                form.querySelector('input[name="text_color"]').value = '#000000';
             }
 
             app.hideModals();

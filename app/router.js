@@ -7,7 +7,6 @@ const listController = require('./controllers/listController');
 const cardController = require('./controllers/cardController');
 const tagController = require('./controllers/tagController');
 const loginController = require('./controllers/loginController');
-const loginMiddleware = require('./middlewares/login');
 
 // User
 router.get('/users', userController.getAllUsers);
@@ -63,9 +62,5 @@ router.delete('/cards/:cardId/tags/:tagId', tagController.removeTagFromCard);
 router.post('/login', loginController.login);
 
 router.get('/disconnect', loginController.disconnect);
-
-// Login
-
-router.use(loginMiddleware);
 
 module.exports = router;
