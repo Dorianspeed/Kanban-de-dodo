@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Le Kanban de Dodo</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+</head>
+
+<body>
+    <nav class="navbar is-light" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="./index.html">
+                <i class="fas fa-2x fa-table has-text-info"></i>
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false"
+                data-target="navbarMenu">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div id="navbarMenu" class="navbar-menu">
+            <div class="navbar-start">
+                <div href="./index.html" class="navbar-item">Bienvenue sur le Kanban de Dodo</div>
+                <div class="navbar-item has-dropdown is-hoverable">
+                    <a class="navbar-link">Sélectionner un tableau</a>
+                    <div class="navbar-dropdown">
+                    </div>
+                </div>
+                <div class="navbar-item">
+                    <div class="buttons">
+                        <a class="button is-info is-outlined" id="addTableButton">
+                            <span class="icon">
+                                <i class="fas fa-plus"></i>
+                            </span>
+                            <span>Ajouter un tableau</span>
+                        </a>
+                        <a class="button is-primary is-outlined is-hidden" id="editTableButton">
+                            <i class="fas fa-pencil-alt"></i>
+                        </a>
+                        <a class="button is-danger is-outlined is-hidden" id="deleteTableButton">
+                            <i class="fas fa-trash-alt"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    <div class="buttons">
+                        <a class="button is-danger is-outlined" id="disconnect">Se déconnecter</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column">
+                    <div class="buttons">
+                        <button class="button is-info is-hidden" id="addListButton">
+                            <span class="icon">
+                                <i class="fas fa-plus"></i>
+                            </span>
+                            <span>Ajouter une liste</span>
+                        </button>
+                        <button class="button is-info is-hidden" id="addTagButton">
+                            <span class="icon">
+                                <i class="fas fa-plus"></i>
+                            </span>
+                            <span>Créer un tag</span>
+                        </button>
+                        <button class="button is-primary is-hidden" id="editTagButton">
+                            <span class="icon">
+                                <i class="fas fa-pencil-alt"></i>
+                            </span>
+                            <span>Modifier un tag</span>
+                        </button>
+                        <button class="button is-danger is-hidden" id="deleteTagButton">
+                            <span class="icon">
+                                <i class="fas fa-trash-alt"></i>
+                            </span>
+                            <span>Supprimer un tag</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="section" id="table">
+        <div class="container">
+            <div class="columns" id="lists"></div>
+        </div>
+    </section>
+
+    <!-- Les modales -->
+    <div class="modal" id="addTableModal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <form method="POST">
+                <header class="modal-card-head">
+                    <p class="modal-card-title">Ajouter un tableau</p>
+                    <button class="delete close" type="button" aria-label="close"></button>
+                </header>
+                <section class="modal-card-body">
+                    <div class="field">
+                        <label class="label">Nom</label>
+                        <div class="control has-icons-left">
+                            <input type="text" class="input is-info" name="name" value="" placeholder="Nom du tableau">
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-pencil-alt"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Couleur de fond</label>
+                        <div class="control">
+                            <input type="color" class="input is-info" name="background_color" value="#CCCCCC">
+                        </div>
+                    </div>
+                </section>
+                <footer class="modal-card-foot">
+                    <button class="button is-info">Sauvegarder</button>
+                    <button class="button close" type="button">Annuler</button>
+                </footer>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="addListModal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <form method="POST">
+                <header class="modal-card-head">
+                    <p class="modal-card-title">Ajouter une liste</p>
+                    <button class="delete close" type="button" aria-label="close"></button>
+                </header>
+                <section class="modal-card-body">
+                    <div class="field">
+                        <label class="label">Nom</label>
+                        <div class="control has-icons-left">
+                            <input type="text" class="input is-info" name="name" value="" placeholder="Nom de la liste">
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-pencil-alt"></i>
+                            </span>
+                            <input type="hidden" name="table_id">
+                        </div>
+                    </div>
+                </section>
+                <footer class="modal-card-foot">
+                    <button class="button is-info">Sauvegarder</button>
+                    <button class="button close" type="button">Annuler</button>
+                </footer>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="addCardModal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <form method="POST">
+                <header class="modal-card-head">
+                    <p class="modal-card-title">Ajouter une carte</p>
+                    <button class="delete close" type="button" aria-label="close"></button>
+                </header>
+                <section class="modal-card-body">
+                    <div class="field">
+                        <label class="label">Nom</label>
+                        <div class="control has-icons-left">
+                            <input type="text" class="input is-info" name="name" value="" placeholder="Nom de la carte">
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-pencil-alt"></i>
+                            </span>
+                            <input type="hidden" name="list_id">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Couleur du fond</label>
+                        <div class="control">
+                            <input type="color" class="input is-info" name="background_color" value="#FFFFFF">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Couleur du texte</label>
+                        <div class="control">
+                            <input type="color" class="input is-info" name="text_color" value="#000000">
+                        </div>
+                    </div>
+                </section>
+                <footer class="modal-card-foot">
+                    <button class="button is-info">Sauvegarder</button>
+                    <button class="button close" type="button">Annuler</button>
+                </footer>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="addTagModal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <form method="POST">
+                <header class="modal-card-head">
+                    <p class="modal-card-title">Créer un tag</p>
+                    <button class="delete close" type="button" aria-label="close"></button>
+                </header>
+                <section class="modal-card-body">
+                    <div class="field">
+                        <label class="label">Nom</label>
+                        <div class="control has-icons-left">
+                            <input type="text" class="input is-info" name="name" value="" placeholder="Nom du tag">
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-pencil-alt"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Couleur du fond</label>
+                        <div class="control">
+                            <input type="color" class="input is-info" name="background_color" value="#FFFFFF">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Couleur du texte</label>
+                        <div class="control">
+                            <input type="color" class="input is-info" name="text_color" value="#000000">
+                        </div>
+                    </div>
+                </section>
+                <footer class="modal-card-foot">
+                    <button class="button is-info">Sauvegarder</button>
+                    <button class="button close" type="button">Annuler</button>
+                </footer>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="editTableModal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <form method="POST">
+                <header class="modal-card-head">
+                    <p class="modal-card-title">Modifier le tableau</p>
+                    <button class="delete close" type="button" aria-label="close"></button>
+                </header>
+                <section class="modal-card-body">
+                    <div class="field">
+                        <label class="label">Nom</label>
+                        <div class="control has-icons-left">
+                            <input type="text" class="input is-info" name="name" value="" placeholder="Nom du tableau">
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-pencil-alt"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Couleur de fond</label>
+                        <div class="control">
+                            <input type="color" class="input is-info" name="background_color" value="#CCCCCC">
+                        </div>
+                    </div>
+                </section>
+                <footer class="modal-card-foot">
+                    <button class="button is-info">Sauvegarder</button>
+                    <button class="button close" type="button">Annuler</button>
+                </footer>
+            </form>
+        </div>
+    </div>
+    
+    <div class="modal" id="editTagModal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <form method="POST">
+                <header class="modal-card-head">
+                    <p class="modal-card-title">Modifier un tag</p>
+                    <button class="delete close" type="button" aria-label="close"></button>
+                </header>
+                <section class="modal-card-body">
+                    <div class="field has-addons">
+                        <div class="control is-expanded">
+                            <div class="select is-fullwidth is-info">
+                                <select name="tagId" id="editTagList">
+                                    <option value="" name="" backgroundcolor="#FFFFFF" textcolor="#000000" selected="selected">Sélectionner le tag à modifier...</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Nom</label>
+                        <div class="control has-icons-left">
+                            <input type="text" class="input is-info" name="name" value="" placeholder="Nom du tag">
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-pencil-alt"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Couleur de fond</label>
+                        <div class="control">
+                            <input type="color" class="input is-info" name="background_color" value="#FFFFFF">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Couleur de texte</label>
+                        <div class="control">
+                            <input type="color" class="input is-info" name="text_color" value="#000000">
+                        </div>
+                    </div>
+                </section>
+                <footer class="modal-card-foot">
+                    <button class="button is-info">Sauvegarder</button>
+                    <button class="button close" type="button">Annuler</button>
+                </footer>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="addTagToCardModal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <form method="POST">
+                <header class="modal-card-head">
+                    <p class="modal-card-title">Ajouter un nouveau tag</p>
+                    <button class="delete close" type="button" aria-label="close"></button>
+                </header>
+                <section class="modal-card-body">
+                    <div class="field has-addons">
+                        <div class="control is-expanded">
+                            <div class="select is-fullwidth is-info">
+                                <select name="tagId" id="addTagList">
+                                </select>
+                            </div>
+                        </div>
+                        <input type="hidden" name="card_id">
+                    </div>
+                </section>
+                <footer class="modal-card-foot">
+                    <button class="button is-info">Sauvegarder</button>
+                    <button class="button close" type="button">Annuler</button>
+                </footer>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="deleteTagModal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <form method="POST">
+                <header class="modal-card-head">
+                    <p class="modal-card-title">Supprimer un tag</p>
+                    <button class="delete close" type="button" aria-label="close"></button>
+                </header>
+                <section class="modal-card-body">
+                    <div class="field has-addons">
+                        <div class="control is-expanded">
+                            <div class="select is-fullwidth is-info">
+                                <select name="tagId" id="deleteTagList">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <footer class="modal-card-foot">
+                    <button class="button is-info">Sauvegarder</button>
+                    <button class="button close" type="button">Annuler</button>
+                </footer>
+            </form>
+        </div>
+    </div>
+
+    <!-- Les scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <script src="./assets/js/app.js"></script>
+
+    <!-- Les templates -->
+    <template id="template-table">
+        <a class="navbar-item"></a>
+    </template>
+
+    <template id="template-list">
+        <div class="column is-one-quarter list">
+            <div class="panel-heading has-background-info">
+                <div class="columns">
+                    <div class="column">
+                        <h2 class="has-text-white"></h2>
+                        <form action="" method="POST" class="is-hidden">
+                            <input type="hidden" name="list-id" value="1">
+                            <div class="field has-addons">
+                                <div class="control">
+                                    <input type="text" class="input is-small" name="name" value="" placeholder="Nom de la liste">
+                                </div>
+                                <div class="control">
+                                    <button class="button is-small is-success">Valider</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="column is-narrow">
+                        <a href="#" class="button--edit-list">
+                            <span class="icon is-small has-text-primary">
+                                <i class="fas fa-pencil-alt"></i>
+                            </span>
+                        </a>
+                        <a href="#" class="button--delete-list">
+                            <span class="icon is-small has-text-danger">
+                                <i class="fas fa-trash-alt"></i>
+                            </span>
+                        </a>
+                        <a href="#" class="button--add-card">
+                            <span class="icon is-small has-text-white">
+                                <i class="fas fa-plus"></i>
+                            </span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-block is-block has-background-light">
+            </div>
+        </div>
+    </template>
+
+    <template id="template-card">
+        <div class="box card">
+            <div class="columns">
+                <div class="column card-name">
+                </div>
+                <form action="" method="POST" class="is-hidden">
+                    <div class="field">
+                        <div class="control">
+                            <label>Nom
+                                <input type="text" class="input is-small" name="name" value="" placeholder="Nom de la carte">
+                            </label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="control">                        
+                            <label>Couleur de fond
+                                <input type="color" class="input is-small" name="background_color" value="#FFFFFF">
+                            </label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="control">                           
+                            <label>Couleur de texte
+                                <input type="color" class="input is-small" name="text_color" value="#000000">
+                            </label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="control">
+                            <button class="button is-small is-success">Valider</button>
+                        </div>
+                    </div>
+                </form>
+                <div class="column is-narrow">
+                    <a href="#" class="button--edit-card">
+                        <span class="icon is-small has-text-primary">
+                            <i class="fas fa-pencil-alt"></i>
+                        </span>
+                    </a>
+                    <a href="#" class="button--delete-card">
+                        <span class="icon is-small has-text-danger">
+                            <i class="fas fa-trash-alt"></i>
+                        </span>
+                    </a>
+                    <a href="#" class="button--add-tag">
+                        <span class="icon is-small has-text-info">
+                            <i class="fas fa-plus"></i>
+                        </span>
+                    </a>
+                </div>
+            </div>
+            <div class="field is-grouped is-grouped-multiline">
+            </div>
+        </div>
+    </template>
+
+    <template id="template-tag">
+        <div class="control">
+            <div class="tags has-addons">
+                <span class="tag">
+                </span>
+                <a class="tag is-delete is-danger"></a>
+            </div>
+        </div>
+    </template>
+
+    <template id="template-tagOption">
+        <option value=""></option>
+    </template>
+</body>
+</html>

@@ -4,7 +4,6 @@ const router = require('./app/router');
 const session = require('express-session');
 const multer = require('multer');
 const bodyParser = multer();
-const cors = require('cors');
 const loginMiddleware = require('./app/middlewares/login');
 const userMiddleware = require('./app/middlewares/user');
 
@@ -15,7 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(bodyParser.none());
 
-app.use(cors());
+app.use(express.static(__dirname + '/public'));
 
 app.use(session({
     resave: true,

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kanban de Dodo</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+</head>
+
+<body>
+    <nav class="navbar is-light" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+            <a class="navbar-item">
+                <i class="fas fa-2x fa-table has-text-info"></i>
+            </a>
+            <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false"
+                data-target="navbarMenu">
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </a>
+        </div>
+        <div id="navbarMenu" class="navbar-menu">
+            <div class="navbar-start">
+                <div href="./index.html" class="navbar-item">Bienvenue sur le Kanban de Dodo</div>
+            </div>
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    <div class="buttons">
+                        <a class="button is-outlined" href="./login.html">Se connecter</a>
+                        <a class="button is-info is-outlined is-focused" href="./register.html">Créer un compte</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section class="section">
+        <div class="columns">
+            <div class="column"></div>
+            <form action="" method="POST" class="column">
+                <h1 class="title has-text-dark">Formulaire d'inscription</h1>
+                <div class="content">
+                    <ul class="has-text-danger">
+                    </ul>
+                </div>
+                <div class="field">
+                    <label for="firstName" class="label has-text-dark">Prénom</label>
+                    <div class="control has-icons-left">
+                        <input id="firstName" type="text" class="input is-info" name="first_name"
+                            placeholder="Votre prénom">
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-pencil-alt"></i>
+                        </span>
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="lastName" class="label has-text-dark">Nom</label>
+                    <div class="control has-icons-left">
+                        <input id="lastName" type="text" class="input is-info" name="last_name" placeholder="Votre nom">
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-pen-alt"></i>
+                        </span>
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="email" class="label has-text-dark">Adresse email</label>
+                    <div class="control has-icons-left">
+                        <input id="email" type="email" class="input is-info" name="email" placeholder="Votre email">
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-envelope"></i>
+                        </span>
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="password" class="label has-text-dark">Mot de passe</label>
+                    <div class="control has-icons-left">
+                        <input id="password" type="password" class="input is-info" name="password"
+                            placeholder="Votre mot de passe">
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-lock"></i>
+                        </span>
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="confirmedPassword" class="label has-text-dark">Confirmation du mot de passe</label>
+                    <div class="control has-icons-left">
+                        <input id="confirmedPassword" type="password" class="input is-info" name="confirmedPassword"
+                            placeholder="Confirmation du mot de passe">
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-lock"></i>
+                        </span>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="control has-text-centered">
+                        <button class="button is-info">Soumettre le formulaire</button>
+                    </div>
+                </div>
+            </form>
+            <div class="column"></div>
+        </div>
+    </section>
+
+    <!-- Les scripts -->
+    <script src="./assets/js/register.js"></script>
+
+    <!-- Templates -->
+    <template id="template-error">
+        <li></li>
+    </template>
+</body>
+
+</html>

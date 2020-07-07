@@ -1,0 +1,1023 @@
+const app = {
+    init: () => {
+        app.addListenerToActions();
+        app.getTablesFromAPI();
+        app.getTagsFromAPI();
+        app.makeListsDroppable();
+    },
+
+    base_url: 'http://localhost:3000',
+
+    addListenerToActions: () => {
+        // Bouton "Ajouter un tableau"
+        document.getElementById('addTableButton').addEventListener('click', app.showAddTableModal);
+
+        // Bouton "Ajouter une liste"
+        document.getElementById('addListButton').addEventListener('click', app.showAddListModal);
+
+        // Bouton "Ajouter un nouveau tag"
+        document.getElementById('addTagButton').addEventListener('click', app.showAddTagModal);
+
+        // Bouton "Modifier un tag"
+        document.getElementById('editTagButton').addEventListener('click', app.showEditTagModal);
+
+        // Bouton "Supprimer un tag"
+        document.getElementById('deleteTagButton').addEventListener('click', app.showDeleteTagModal);
+
+        // Bouton "Fermer les modales"
+        let modals = document.querySelectorAll('.close');
+        for (let modal of modals) {
+            modal.addEventListener('click', app.hideModals);
+        }
+
+        // Bouton "Modifier le tableau"
+        document.getElementById('editTableButton').addEventListener('click', app.showEditTableModal);
+
+        // Bouton "Supprimer le tableau"
+        document.getElementById('deleteTableButton').addEventListener('click', app.deleteTableFromDOM);
+
+        // Bouton "Se déconnecter"
+        document.getElementById('disconnect').addEventListener('click', app.disconnectFromApp);
+
+        // Formulaire "Ajouter un tableau"
+        document.querySelector('#addTableModal form').addEventListener('submit', app.handleAddTableForm);
+
+        // Formulaire "Ajouter une liste"
+        document.querySelector('#addListModal form').addEventListener('submit', app.handleAddListForm);
+
+        // Formulaire "Ajouter une carte"
+        document.querySelector('#addCardModal form').addEventListener('submit', app.handleAddCardForm);
+
+        // Formulaire "Ajouter un nouveau tag"
+        document.querySelector('#addTagModal form').addEventListener('submit', app.handleAddTagForm);
+
+        // Formulaire "Modifier un tableau"
+        document.querySelector('#editTableModal form').addEventListener('submit', app.handleEditTableForm);
+
+        // Formulaire "Modifier un tag"
+        document.querySelector('#editTagModal form').addEventListener('submit', app.handleEditTagForm);
+
+        // Formulaire "Associer un tag à une carte"
+        document.querySelector('#addTagToCardModal form').addEventListener('submit', app.handleAddTagToCardForm);
+
+        // Formulaire "Supprimer un tag"
+        document.querySelector('#deleteTagModal form').addEventListener('submit', app.handleDeleteTagFromAPIForm);
+
+        // Evènement sur la modification du select "Modifier un tag"
+        document.querySelector('#editTagModal select').addEventListener('change', (event) => {
+            let modal = event.target.closest('.modal');
+            modal.querySelector('input[name="name"]').value = modal.querySelector(`option[value="${event.target.value}"]`).getAttribute('name');
+            modal.querySelector('input[name="background_color"]').value = modal.querySelector(`option[value="${event.target.value}"]`).getAttribute('backgroundColor');
+            modal.querySelector('input[name="text_color"]').value = modal.querySelector(`option[value="${event.target.value}"]`).getAttribute('textColor');
+        });
+    },
+
+    showAddTableModal: () => {
+        document.getElementById('addTableModal').classList.add('is-active');
+    },
+
+    showAddListModal: (event) => {
+        // On récupère l'id de la table
+        let tableId = document.getElementById('table').getAttribute('data-table-id');
+        
+        // On récupère l'input de la modale
+        let input = document.getElementById('addListModal').querySelector('input[name="table_id"]');
+        
+        // On change sa valeur
+        input.value = tableId;
+
+        // On affiche la modale
+        document.getElementById('addListModal').classList.add('is-active');
+    },
+
+    showAddCardModal: (event) => {
+        // On récupère l'id de la liste
+        let listId = event.target.closest('.list').getAttribute('data-list-id');
+
+        // On récupère l'input de la modale
+        let input = document.getElementById('addCardModal').querySelector('input[name="list_id"]');
+
+        // On change sa valeur
+        input.value = listId;
+
+        // On affiche la modale
+        document.getElementById('addCardModal').classList.add('is-active');
+    },
+
+    showAddTagModal: () => {
+        document.getElementById('addTagModal').classList.add('is-active');
+    },
+
+    showEditTableModal: () => {
+        document.getElementById('editTableModal').classList.add('is-active');
+    },
+
+    showEditTagModal: () => {
+        document.getElementById('editTagModal').classList.add('is-active');
+    },
+
+    showAddTagToCardModal: (event) => {
+        // On récupère l'id de la carte
+        let cardId = event.target.closest('.card').getAttribute('data-card-id');
+
+        // On récupère l'input de la modale
+        let input = document.getElementById('addTagToCardModal').querySelector('input[name="card_id"]');
+
+        // On change sa valeur
+        input.value = cardId;
+
+        // On affiche la modale
+        document.getElementById('addTagToCardModal').classList.add('is-active');
+    },
+
+    showDeleteTagModal: () => {
+        document.getElementById('deleteTagModal').classList.add('is-active');
+    },
+
+    showEditListForm: (event) => {
+        // On récupère les élements
+        let listElement = event.target.closest('.list');
+        let formElement = listElement.querySelector('form');
+
+        // On met la valeur existante dans l'input
+        formElement.querySelector('input[name="name"]').value = listElement.querySelector('h2').textContent;
+
+        // On affiche le formulaire et on masque le h2
+        listElement.querySelector('h2').classList.add('is-hidden');
+        formElement.classList.remove('is-hidden');
+
+        // On cache les trois boutons
+        listElement.querySelector('.button--edit-list').classList.add('is-hidden');
+        listElement.querySelector('.button--delete-list').classList.add('is-hidden');
+        listElement.querySelector('.button--add-card').classList.add('is-hidden');
+    },
+
+    showEditCardForm: (event) => {
+        // On récupère les élements
+        let cardElement = event.target.closest('.card');
+        let formElement = cardElement.querySelector('form');
+
+        // On met la valeur existante dans l'input
+        formElement.querySelector('input[name="name"]').value = cardElement.querySelector('.card-name').textContent;
+
+        // On affiche le formulaire et on masque la div
+        cardElement.querySelector('.card-name').classList.add('is-hidden');
+        formElement.classList.remove('is-hidden');
+
+        // On cache les trois boutons
+        cardElement.querySelector('.button--edit-card').classList.add('is-hidden');
+        cardElement.querySelector('.button--delete-card').classList.add('is-hidden');
+        cardElement.querySelector('.button--add-tag').classList.add('is-hidden');
+    },
+
+    hideModals: () => {
+        let modals = document.querySelectorAll('.modal');
+        for (let modal of modals) {
+            modal.classList.remove('is-active');
+        }
+    },
+
+    handleAddTableForm: async (event) => {
+        try {
+            event.preventDefault();
+
+            let data = new FormData(event.target);
+
+            data.set('user_id', 1);
+
+            let response = await fetch (app.base_url + '/tables', {
+                method: 'POST',
+                body: data
+            });
+
+            if (response.status !== 201) {
+                let error = await response.json();
+                throw error;
+            } else {
+                let table = await response.json();
+                app.makeTableListInDOM(table.id, table.name);
+                app.showCreatedtable(table.id, table.name, table.background_color);
+
+                let form = document.querySelector('#addTableModal form');
+                form.querySelector('input[name="name"]').value = '';
+                form.querySelector('input[name="background_color"]').value = '#CCCCCC';
+            }
+
+            app.hideModals();
+        }
+
+        catch (error) {
+            alert('Impossible de créer le tableau');
+            console.trace(error);
+        }
+    },
+
+    handleAddListForm: async (event) => {
+        try {
+            event.preventDefault()
+            let data = new FormData(event.target);
+
+            let numberOfLists = document.querySelectorAll('div[data-list-id]').length;
+            data.set('position', numberOfLists);
+
+            data.set('user_id', 1);
+
+            let response = await fetch (app.base_url + '/lists', {
+                method: 'POST',
+                body: data
+            });
+
+            if (response.status !== 201) {
+                let error = await response.json();
+                throw error;
+            } else {
+                let list = await response.json();
+                app.makeListInDOM(list.id, list.name);
+
+                let form = document.querySelector('#addListModal form');
+                form.querySelector('input[name="name"]').value = '';
+            }
+
+            app.hideModals();
+        }
+
+        catch (error) {
+            alert('Impossible de créer la liste');
+            console.trace(error);
+        }
+    },
+
+    handleAddCardForm: async (event) => {
+        try {
+            // On supprime le comportement par défaut du submit
+            event.preventDefault();
+
+            // On stocke le formulaire reçu
+            let data = new FormData(event.target);
+
+            // On récupère l'id de la liste stocké dans l'input
+            let listId = document.querySelector('#addCardModal input[name="list_id"]').value;
+
+            // On génère la position de la carte en fonction du nombre de cartes déjà présentes
+            let numberOfCards = document.querySelectorAll(`div[data-list-id="${listId}"] .box`).length;
+
+            data.set('position', numberOfCards);
+            data.set('user_id', 1);
+
+            // On fait la requête permettant la création d'un carte
+            let response = await fetch (app.base_url + '/cards', {
+                method: 'POST',
+                body: data
+            });
+
+            if (response.status !== 201) {
+                // Si un erreur survient, on l'envoie à l'attrapeur
+                let error = await response.json();
+                throw error;
+            } else {
+                // Si tout se passe bien, on récupère la carte
+                let card = await response.json();
+
+                // On crée la carte
+                app.makeCardInDOM(card.id, card.name, card.background_color, card.text_color, card.list_id);
+
+                // On réinitialise les inputs du formulaire
+                let form = document.querySelector('#addCardModal form');
+                form.querySelector('input[name="name"]').value = '';
+                form.querySelector('input[name="background_color"]').value = '#FFFFFF';
+                form.querySelector('input[name="text_color"]').value = '#000000';
+            }
+
+            app.hideModals();
+        }
+
+        catch (error) {
+            alert('Impossible de créer la carte');
+            console.trace(error);
+        }
+    },
+
+    handleAddTagForm: async (event) => {
+        try {
+            event.preventDefault();
+
+            let data = new FormData(event.target);
+
+            data.set('user_id', 1);
+
+            let response = await fetch (app.base_url + '/tags', {
+                method: 'POST',
+                body: data
+            });
+
+            if (response.status !== 201) {
+                let error = await response.json();
+                throw error;
+            } else {
+                let tag = await response.json();
+                app.makeAddTagListInDOM(tag.id, tag.name);
+                app.makeEditTagListInDOM(tag.id, tag.name, tag.background_color, tag.text_color);
+                app.makeDeleteTagListInDOM(tag.id, tag.name);
+            }
+
+            app.hideModals();
+        }
+
+        catch (error) {
+            alert('Impossible de créer le tag');
+            console.trace(error);
+        }
+    },
+
+    handleAddTagToCardForm: async (event) => {
+        try {
+            event.preventDefault();
+
+            let data = new FormData(event.target);
+
+            let cardId = event.target.querySelector('input[name="card_id"]').value;
+
+            let response = await fetch (app.base_url + '/cards/' + cardId + '/tags', {
+                method: 'POST',
+                body: data
+            });
+
+            if (response.status !== 200) {
+                let error = response.json();
+                throw error;
+            } else {
+                let card = await response.json();
+                document.querySelector(`[data-card-id="${cardId}"]`).querySelector('.is-grouped-multiline').textContent = '';
+                for (let tag of card.tags) {
+                    app.makeTagInDOM(tag.id, tag.name, tag.background_color, tag.text_color, card.id);
+                }
+            }
+
+            app.hideModals();
+        }
+
+        catch (error) {
+            alert('Impossible d\'associer le tag à la carte');
+            console.trace(error);
+        }
+    },
+
+    handleEditTableForm: async (event) => {
+        try {
+            event.preventDefault();
+
+            let data = new FormData(event.target);
+
+            let tableId = document.querySelector('.section').getAttribute('data-table-id');
+
+            let response = await fetch (app.base_url + '/tables/' + tableId, {
+                method: 'PATCH',
+                body: data
+            });
+
+            if (response.status !== 200) {
+                let error = await response.json();
+                throw error;
+            } else {
+                let table = await response.json();
+                document.querySelector(`a[data-table-id="${tableId}"]`).textContent = table.name;
+                document.body.style.backgroundColor = table.background_color;
+                document.querySelector('.navbar-link').textContent = table.name;
+            }
+
+            app.hideModals();
+        }
+
+        catch (error) {
+            alert('Impossible de modifier le tableau');
+            console.trace(error);
+        }
+    },
+
+    handleEditListForm: async (event) => {
+        try {
+            event.preventDefault();
+
+            let data = new FormData(event.target);
+
+            let listElement = event.target.closest('.list');
+            let listId = listElement.getAttribute('data-list-id');
+            
+            let response = await fetch (app.base_url + '/lists/' + listId, {
+                method: 'PATCH',
+                body: data
+            });
+
+            if (response.status !== 200) {
+                let error = await response.json();
+                throw error;
+            } else {
+                let list = await response.json();
+
+                listElement.querySelector('h2').textContent = list.name;
+            }
+
+            listElement.querySelector('h2').classList.remove('is-hidden');
+            listElement.querySelector('form').classList.add('is-hidden');
+
+            listElement.querySelector('.button--edit-list').classList.remove('is-hidden');
+            listElement.querySelector('.button--delete-list').classList.remove('is-hidden');
+            listElement.querySelector('.button--add-card').classList.remove('is-hidden');
+        }
+
+        catch (error) {
+            alert('Impossible de modifier la liste');
+            console.trace(error);
+        }
+    },
+
+    handleEditCardForm: async (event) => {
+        try {
+            event.preventDefault();
+
+            let data = new FormData(event.target);
+
+            let cardElement = event.target.closest('.card');
+            let cardId = cardElement.getAttribute('data-card-id');
+
+            let response = await fetch (app.base_url + '/cards/' + cardId, {
+                method: 'PATCH',
+                body: data
+            });
+
+            if (response.status !== 200) {
+                let error = await response.json();
+                throw error;
+            } else {
+                let card = await response.json();
+
+                cardElement.querySelector('.card-name').textContent = card.name;
+                cardElement.setAttribute('style', 'background-color: ' + card.background_color + '; color: ' + card.text_color);
+            }
+
+            cardElement.querySelector('.card-name').classList.remove('is-hidden');
+            cardElement.querySelector('form').classList.add('is-hidden');
+
+            cardElement.querySelector('.button--edit-card').classList.remove('is-hidden');
+            cardElement.querySelector('.button--delete-card').classList.remove('is-hidden');
+            cardElement.querySelector('.button--add-tag').classList.remove('is-hidden');
+        }
+
+        catch (error) {
+            alert('Impossible de modifier la carte');
+            console.trace(error);
+        }
+    },
+
+    handleEditTagForm: async (event) => {
+        try {
+            event.preventDefault();
+
+            let data = new FormData(event.target);
+
+            let tagId = event.target.querySelector('select[name="tagId"]').value;
+
+            let response = await fetch (app.base_url + '/tags/' + tagId, {
+                method: 'PATCH',
+                body: data
+            });
+
+            if (response.status !== 200) {
+                let error = await response.json();
+                throw error;
+            } else {
+                let modifiedTag = await response.json();
+                
+                let tags = document.querySelectorAll(`div[data-tag-id="${tagId}"]`);
+
+                if (tags) {
+                    for (let tag of tags) {
+                        tag.querySelector('span').textContent = modifiedTag.name;
+                        tag.querySelector('span').setAttribute('style', 'background-color: ' + modifiedTag.background_color + '; color: ' + modifiedTag.text_color);
+                    }
+                }
+
+                let option = document.querySelector(`#editTagList option[value="${tagId}"]`);
+                option.setAttribute('name', modifiedTag.name);
+                option.setAttribute('backgroundColor', modifiedTag.background_color);
+                option.setAttribute('textColor', modifiedTag.text_color);
+
+                document.getElementById('editTagList').value = '';
+                document.getElementById('editTagModal').querySelector('input[name="name"]').value = '';
+                document.getElementById('editTagModal').querySelector('input[name="background_color"]').value = '#FFFFFF';
+                document.getElementById('editTagModal').querySelector('input[name="text_color"]').value = '#000000';
+            }
+
+            app.hideModals();
+        }
+        
+        catch (error) {
+            alert('Impossible de modifier le tag');
+            console.trace(error);
+        }
+    },
+
+    handleDeleteTagFromAPIForm: async (event) => {
+        try {
+            event.preventDefault();
+
+            let tagId = event.target.querySelector('select[name="tagId"]').value;
+
+            let response = await fetch (app.base_url + '/tags/' + tagId, {
+                method: 'DELETE'
+            });
+
+            if (response.status !== 200) {
+                let error = await response.json();
+                throw error;
+            } else {
+                let message = await response.json();
+                console.log(message);
+
+                let selects = document.querySelectorAll(`option[value="${tagId}"]`);
+                for (let select of selects) {
+                    select.parentNode.removeChild(select);
+                }
+
+                let tags = document.querySelectorAll(`div[data-tag-id="${tagId}"]`);
+                for (let tag of tags) {
+                    tag.parentNode.removeChild(tag);
+                }
+            }
+
+            app.hideModals();
+        }
+
+        catch (error) {
+            alert('Impossible de supprimer le tag');
+            console.trace(error);
+        }
+    },
+
+    handleDropList: (event) => {
+        const targetColumn = event.to;
+        const originColumn = event.from;
+
+        let lists = originColumn.querySelectorAll('.list');
+        app.updateAllLists(lists);
+
+        if (originColumn !== targetColumn) {
+            lists = targetColumn.querySelectorAll('.list');
+            app.updateAllLists(lists);
+        }
+    },
+
+    handleDropCard: (event) => {
+        const targetList = event.to;
+        const originList = event.from;
+
+        let cards = originList.querySelectorAll('.box');
+        let listId = originList.closest('.list').getAttribute('data-list-id');
+        app.updateAllCards(cards, listId);
+
+        if (originList !== targetList) {
+            cards = targetList.querySelectorAll('.box');
+            listId = targetList.closest('.list').getAttribute('data-list-id');
+            app.updateAllCards(cards, listId);
+        }
+    },
+
+    makeTableListInDOM: (tableId, name) => {
+        // On récupère le template
+        let template = document.getElementById('template-table');
+
+        // On crée une nouvelle copie
+        let newTable = document.importNode(template.content, true);
+
+        // On change les valeurs
+        newTable.querySelector('a').textContent = name;
+        newTable.querySelector('a').setAttribute('data-table-id', tableId);
+
+        // On ajoute les events listener
+        newTable.querySelector('a').addEventListener('click', app.showClickedTable);
+
+        // On insère la table dans le DOM
+        document.querySelector('.navbar-dropdown').appendChild(newTable);
+    },
+
+    makeAddTagListInDOM : (tagId, name) => {
+        // On récupère le template
+        let template = document.getElementById('template-tagOption');
+
+        // On crée une nouvelle copie
+        let newTag = document.importNode(template.content, true);
+
+        // On change les valeurs
+        newTag.querySelector('option').setAttribute('value', tagId);
+        newTag.querySelector('option').textContent = name;
+
+        // On insère le tag dans le DOM
+        document.getElementById('addTagList').appendChild(newTag);
+    },
+
+    makeEditTagListInDOM : (tagId, name, backgroundColor, textColor) => {
+        // On récupère le template
+        let template = document.getElementById('template-tagOption');
+
+        // On crée une nouvelle copie
+        let newTag = document.importNode(template.content, true);
+
+        // On change les valeurs
+        newTag.querySelector('option').setAttribute('value', tagId);
+        newTag.querySelector('option').setAttribute('name', name);
+        newTag.querySelector('option').setAttribute('backgroundColor', backgroundColor);
+        newTag.querySelector('option').setAttribute('textColor', textColor);
+        newTag.querySelector('option').textContent = name;
+
+        // On insère le tag dans le DOM
+        document.getElementById('editTagList').appendChild(newTag);
+    },
+
+    makeDeleteTagListInDOM : (tagId, name) => {
+        // On récupère le template
+        let template = document.getElementById('template-tagOption');
+
+        // On crée une nouvelle copie
+        let newTag = document.importNode(template.content, true);
+
+        // On change les valeurs
+        newTag.querySelector('option').setAttribute('value', tagId);
+        newTag.querySelector('option').textContent = name;
+
+        // On insère le tag dans le DOM
+        document.getElementById('deleteTagList').appendChild(newTag);
+    },
+
+    makeListInDOM: (listId, name) => {
+        // On récupère le template
+        let template = document.getElementById('template-list');
+
+        // On le clone
+        let newList = document.importNode(template.content, true);
+
+        // On change les valeurs
+        newList.querySelector('h2').textContent = name;
+        newList.querySelector('.list').setAttribute('data-list-id', listId);
+
+        // On ajoute les évènements
+        newList.querySelector('.button--add-card').addEventListener('click', app.showAddCardModal);
+        newList.querySelector('.button--delete-list').addEventListener('click', app.deleteListFromDOM);
+        newList.querySelector('.button--edit-list').addEventListener('click', app.showEditListForm);
+        newList.querySelector('form').addEventListener('submit', app.handleEditListForm);
+
+        // On ajoute le contenu permettant le drag & drop
+        const container = newList.querySelector('.panel-block');
+        new Sortable (container, {
+            group: 'card',
+            draggable: '.box',
+            animation: 150,
+            onEnd: app.handleDropCard
+        });
+
+        // On insére la liste dans le DOM
+        document.getElementById('lists').appendChild(newList);
+    },
+
+    makeCardInDOM: (cardId, name, backgroundColor, textColor, listId) => {
+        // On récupère le template
+        let template = document.getElementById('template-card');
+
+        // On le clone
+        let newCard = document.importNode(template.content, true);
+
+        // On change les valeurs
+        newCard.querySelector('.card-name').textContent = name;
+        newCard.querySelector('.card').setAttribute('data-card-id', cardId);
+        newCard.querySelector('.card').setAttribute('style', 'background-color: ' + backgroundColor + '; color: ' + textColor);
+        newCard.querySelector('input[name="background_color"]').value = backgroundColor;
+        newCard.querySelector('input[name="text_color"]').value = textColor;
+
+        // On ajoute les évènements
+        newCard.querySelector('.button--delete-card').addEventListener('click', app.deleteCardFromDOM);
+        newCard.querySelector('.button--edit-card').addEventListener('click', app.showEditCardForm);
+        newCard.querySelector('form').addEventListener('submit', app.handleEditCardForm);
+        newCard.querySelector('.button--add-tag').addEventListener('click', app.showAddTagToCardModal);
+
+        // On insère la carte dans le DOM
+        document.querySelector(`[data-list-id="${listId}"]`).querySelector('.panel-block').appendChild(newCard);
+    },
+
+    makeTagInDOM: (tagId, name, backgroundColor, textColor, cardId) => {
+        // On récupère le template
+        let template = document.getElementById('template-tag');
+
+        // On le clone
+        let newTag = document.importNode(template.content, true);
+
+        // On change les valeurs
+        newTag.querySelector('span').textContent = name;
+        newTag.querySelector('.control').setAttribute('data-tag-id', tagId);
+        newTag.querySelector('span').setAttribute('style', 'background-color: ' + backgroundColor + '; color: ' + textColor);
+
+        // On ajoute les évènements
+        newTag.querySelector('.is-delete').addEventListener('click', app.deleteTagFromDOM);
+
+        // On insère le tag dans le DOM
+        document.querySelector(`[data-card-id="${cardId}"]`).querySelector('.is-grouped-multiline').appendChild(newTag);
+    },
+
+    makeListsDroppable: () => {
+        // On ajoute le contenu permettant le drag & drop
+        const container = document.getElementById('lists');
+        new Sortable (container, {
+            group: 'list',
+            draggable: '.list',
+            animation: 150,
+            onEnd: app.handleDropList
+        });
+    },
+
+    updateAllLists: (lists) => {
+        try {
+            lists.forEach ( async (list, position) => {
+                const listId = list.getAttribute('data-list-id');
+
+                let data = new FormData();
+
+                data.set ('position', position);
+
+                let response = await fetch (app.base_url + '/lists/' + listId, {
+                    method: 'PATCH',
+                    body: data
+                });
+
+                if (response.status !== 200) {
+                    let error = await response.json();
+                    throw error;
+                } else {
+                    let list = await response.json();
+                }
+            });
+        }
+
+        catch (error) {
+            console.trace(error);
+        }
+    },
+
+    updateAllCards: (cards, listId) => {
+        try {
+            cards.forEach ( async (card, position) => {
+                const cardId = card.getAttribute('data-card-id');
+                
+                let data = new FormData();
+    
+                data.set('position', position);
+                data.set('list_id', listId);
+    
+                let response = await fetch (app.base_url + '/cards/' + cardId, {
+                    method: 'PATCH',
+                    body: data
+                });
+    
+                if (response.status !== 200) {
+                    let error = await response.json();
+                    throw error;
+                } else {
+                    let card = await response.json();
+                }
+            });
+        }
+
+        catch (error) {
+            console.trace(error);
+        }
+    },
+
+    deleteTableFromDOM: async () => {
+        try {
+            let tableId = document.querySelector('.section').getAttribute('data-table-id');
+            let tableElement = document.querySelector(`a[data-table-id="${tableId}"]`);
+
+            let response = await fetch (app.base_url + '/tables/' + tableId, {
+                method: 'DELETE'
+            });
+
+            if (response.status !== 200) {
+                let error = await response.json();
+                throw error;
+            } else {
+                let table = await response.json();
+                console.log(table);
+                tableElement.parentNode.removeChild(tableElement);
+                location = './index.html';
+            }
+        }
+
+        catch (error) {
+            alert('Impossible de supprimer la table');
+            console.trace(error);
+        }
+    },
+
+    deleteListFromDOM: async (event) => {
+        try {
+            let listElement = event.target.closest('.list');
+            let listId = listElement.getAttribute('data-list-id');
+    
+            let response = await fetch (app.base_url + '/lists/' + listId, {
+                method: 'DELETE'
+            });
+    
+            if (response.status !== 200) {
+                let error = await response.json();
+                throw error;
+            } else {
+                let list = await response.json();
+                console.log(list);
+                listElement.parentNode.removeChild(listElement);
+            }
+        }
+
+        catch (error) {
+            alert('Impossible de supprimer la liste');
+            console.trace(error);
+        }
+    },
+
+    deleteCardFromDOM: async (event) => {
+        try {
+            let cardElement = event.target.closest('.card');
+            let cardId = cardElement.getAttribute('data-card-id');
+
+            let response = await fetch (app.base_url + '/cards/' + cardId, {
+                method: 'DELETE'
+            });
+
+            if (response.status !== 200) {
+                let error = await response.json();
+                throw error;
+            } else {
+                let card = await response.json();
+                console.log(card);
+                cardElement.parentNode.removeChild(cardElement);
+            }
+        }
+
+        catch (error) {
+            alert('Impossible de supprimer la carte');
+            console.trace(error);
+        }
+    },
+
+    deleteTagFromDOM: async (event) => {
+        try {
+            let tagElement = event.target.closest('.control');
+            let tagId = tagElement.getAttribute('data-tag-id');
+            let cardId = event.target.closest('.card').getAttribute('data-card-id');
+
+            let response = await fetch (app.base_url + '/cards/' + cardId + '/tags/' + tagId, {
+                method: 'DELETE'
+            });
+
+            if (response.status !== 200) {
+                let error = await response.json();
+                throw error;
+            } else {
+                let card = await response.json()
+                tagElement.parentNode.removeChild(tagElement);
+            }
+        }
+
+        catch (error) {
+            alert('Impossible de supprimer le tag de la carte');
+            console.trace(error);
+        }
+    },
+
+    showCreatedtable: (tableId, name, backgroundColor) => {
+            document.getElementById('lists').textContent = '';
+            document.body.style.backgroundColor = backgroundColor;
+            document.querySelector('#editTableModal input[name="name"]').value =name;
+            document.querySelector('.navbar-link').textContent = name;
+            document.querySelector('#editTableModal input[name="background_color"]').value = backgroundColor;
+            document.getElementById('table').setAttribute('data-table-id', tableId);
+            document.querySelector('section').setAttribute('data-table-id', tableId);
+            let buttons = document.querySelectorAll('.button.is-hidden');
+            if (buttons) {
+                for (let button of buttons) {
+                    button.classList.remove('is-hidden');
+                }
+            }
+    },
+
+    showClickedTable: async (event) => {
+        try {
+            document.getElementById('lists').textContent = '';
+            let tableElement = event.target.closest('a');
+            let tableId = tableElement.getAttribute('data-table-id');
+    
+            let response = await fetch (app.base_url + '/tables/' + tableId);
+    
+            if (response.status !== 200) {
+                let error = await response.json();
+                throw error;
+            } else {
+                let table = await response.json();
+                document.body.style.backgroundColor = table.background_color;
+                document.querySelector('#editTableModal input[name="name"]').value = table.name;
+                document.querySelector('.navbar-link').textContent = table.name;
+                document.querySelector('#editTableModal input[name="background_color"]').value = table.background_color;
+                document.getElementById('table').setAttribute('data-table-id', table.id);
+                document.querySelector('section').setAttribute('data-table-id', table.id);
+                let buttons = document.querySelectorAll('.button.is-hidden');
+                for (let button of buttons) {
+                    button.classList.remove('is-hidden');
+                }
+
+                for (let list of table.lists) {
+                    app.makeListInDOM(list.id, list.name);
+
+                    if (list.cards) {
+                        for (let card of list.cards) {
+                            app.makeCardInDOM(card.id, card.name, card.background_color, card.text_color, list.id);
+
+                            if (card.tags) {
+                                for (let tag of card.tags) {
+                                    app.makeTagInDOM(tag.id, tag.name, tag.background_color, tag.text_color, card.id);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        catch (error) {
+            alert('Impossible de charger le tableau');
+            console.trace(error);
+        }
+    },
+
+    getTablesFromAPI: async () => {
+        try {
+            let response = await fetch (app.base_url + '/tables');
+
+            if (response.status !== 200) {
+                let error = await response.json();
+                throw error;
+            } else {
+                let tables = await response.json();
+
+                for (let table of tables) {
+                    app.makeTableListInDOM(table.id, table.name, table.background_color);
+                }
+            }
+        }
+
+        catch (error) {
+            alert('Impossible de charger les tableaux depuis l\'API');
+            console.trace(error);
+        }
+    },
+
+    getTagsFromAPI: async () => {
+        try {
+            let response = await fetch (app.base_url + '/tags');
+
+            if (response.status !== 200) {
+                let error = await response.json();
+                throw error;
+            } else {
+                let tags = await response.json();
+
+                for (let tag of tags) {
+                    app.makeAddTagListInDOM(tag.id, tag.name);
+                    app.makeEditTagListInDOM(tag.id, tag.name, tag.background_color, tag.text_color);
+                    app.makeDeleteTagListInDOM(tag.id, tag.name);
+                }
+            }
+        }
+
+        catch (error) {
+            alert('Impossible de charger les tags depuis l\'API');
+            console.trace(error);
+        }
+    },
+
+    disconnectFromApp: async () => {
+        try {
+            let response = await fetch (app.base_url + '/disconnect');
+
+            if (response.status !== 200) {
+                let error = await response.json();
+                throw error;
+            } else {
+                let message = await response.json();
+                console.log(response);
+                location = './login.html'
+            }
+        }
+
+        catch (error) {
+            console.trace(error);
+        }
+    }
+};
+
+document.addEventListener('DOMContentLoaded', app.init);
