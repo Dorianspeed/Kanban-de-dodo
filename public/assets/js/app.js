@@ -65,7 +65,10 @@ const app = {
 
         // Evènement sur la modification du select "Modifier un tag"
         document.querySelector('#editTagModal select').addEventListener('change', (event) => {
+            // On récupère la modale
             let modal = event.target.closest('.modal');
+
+            // On attribue les valeurs des inputs grâce aux attributs contenus dans les balises option
             modal.querySelector('input[name="name"]').value = modal.querySelector(`option[value="${event.target.value}"]`).getAttribute('name');
             modal.querySelector('input[name="background_color"]').value = modal.querySelector(`option[value="${event.target.value}"]`).getAttribute('backgroundColor');
             modal.querySelector('input[name="text_color"]').value = modal.querySelector(`option[value="${event.target.value}"]`).getAttribute('textColor');
@@ -73,6 +76,7 @@ const app = {
     },
 
     showAddTableModal: () => {
+        // On affiche la modale
         document.getElementById('addTableModal').classList.add('is-active');
     },
 
@@ -105,14 +109,17 @@ const app = {
     },
 
     showAddTagModal: () => {
+        // On affiche la modale
         document.getElementById('addTagModal').classList.add('is-active');
     },
 
     showEditTableModal: () => {
+        // On affiche la modale
         document.getElementById('editTableModal').classList.add('is-active');
     },
 
     showEditTagModal: () => {
+        // On affiche la modale
         document.getElementById('editTagModal').classList.add('is-active');
     },
 
@@ -131,6 +138,7 @@ const app = {
     },
 
     showDeleteTagModal: () => {
+        // On affiche la modale
         document.getElementById('deleteTagModal').classList.add('is-active');
     },
 
@@ -171,7 +179,10 @@ const app = {
     },
 
     hideModals: () => {
+        // On récupère toutes les modales
         let modals = document.querySelectorAll('.modal');
+
+        // On retire la classe sur chaque modale
         for (let modal of modals) {
             modal.classList.remove('is-active');
         }
@@ -179,30 +190,40 @@ const app = {
 
     handleAddTableForm: async (event) => {
         try {
+            // On supprime le comportement par défaut
             event.preventDefault();
 
+            // On récupère les données du formulaire
             let data = new FormData(event.target);
 
+            // On intègre une donnée aux data
             data.set('user_id', 1);
 
+            // On fait la requête à l'API
             let response = await fetch (app.base_url + '/tables', {
                 method: 'POST',
                 body: data
             });
 
             if (response.status !== 201) {
+                // En cas d'erreurs, on récupère l'erreur et on l'envoie au catch
                 let error = await response.json();
                 throw error;
             } else {
+                // Si tout va bien, on récupère le tableau
                 let table = await response.json();
+
+                // On crée le nouveau tableau et on redirige vers celui-ci
                 app.makeTableListInDOM(table.id, table.name);
                 app.showCreatedtable(table.id, table.name, table.background_color);
 
+                // On réinitialise les inputs du formulaire
                 let form = document.querySelector('#addTableModal form');
                 form.querySelector('input[name="name"]').value = '';
                 form.querySelector('input[name="background_color"]').value = '#CCCCCC';
             }
 
+            // On ferme la modale
             app.hideModals();
         }
 
@@ -214,30 +235,42 @@ const app = {
 
     handleAddListForm: async (event) => {
         try {
+            // On supprime le comportement par défaut
             event.preventDefault()
+
+            // On récupère les données du formulaire
             let data = new FormData(event.target);
 
+            // On récupère le nombre de listes déjà présentes pour définir la position de la nouvelle liste
             let numberOfLists = document.querySelectorAll('div[data-list-id]').length;
-            data.set('position', numberOfLists);
 
+            // On intégre des données aux data
+            data.set('position', numberOfLists);
             data.set('user_id', 1);
 
+            // On fait la requête à l'API
             let response = await fetch (app.base_url + '/lists', {
                 method: 'POST',
                 body: data
             });
 
             if (response.status !== 201) {
+                // En cas d'erreurs, on récupère l'erreur et on l'envoie au catch
                 let error = await response.json();
                 throw error;
             } else {
+                // Si tout va bien, on récupère la liste
                 let list = await response.json();
+
+                // On crée la nouvelle liste
                 app.makeListInDOM(list.id, list.name);
 
+                // On réinitialise l'input du formulaire
                 let form = document.querySelector('#addListModal form');
                 form.querySelector('input[name="name"]').value = '';
             }
 
+            // On ferme la modale
             app.hideModals();
         }
 
@@ -249,10 +282,10 @@ const app = {
 
     handleAddCardForm: async (event) => {
         try {
-            // On supprime le comportement par défaut du submit
+            // On supprime le comportement par défaut
             event.preventDefault();
 
-            // On stocke le formulaire reçu
+            // On récupère les données du formulaire
             let data = new FormData(event.target);
 
             // On récupère l'id de la liste stocké dans l'input
@@ -261,17 +294,18 @@ const app = {
             // On génère la position de la carte en fonction du nombre de cartes déjà présentes
             let numberOfCards = document.querySelectorAll(`div[data-list-id="${listId}"] .box`).length;
 
+            // On intègre les données aux data
             data.set('position', numberOfCards);
             data.set('user_id', 1);
 
-            // On fait la requête permettant la création d'un carte
+            // On fait la requête à l'API
             let response = await fetch (app.base_url + '/cards', {
                 method: 'POST',
                 body: data
             });
 
             if (response.status !== 201) {
-                // Si un erreur survient, on l'envoie à l'attrapeur
+                // Si une erreur survient, on la récupère et on l'envoie au catch
                 let error = await response.json();
                 throw error;
             } else {
@@ -288,6 +322,7 @@ const app = {
                 form.querySelector('input[name="text_color"]').value = '#000000';
             }
 
+            // On ferme la modale
             app.hideModals();
         }
 
@@ -299,32 +334,42 @@ const app = {
 
     handleAddTagForm: async (event) => {
         try {
+            // On supprime le comportement par défaut
             event.preventDefault();
 
+            // On récupère les données du formulaire
             let data = new FormData(event.target);
 
+            // On intègre une donnée aux data
             data.set('user_id', 1);
 
+            // On fait la requête à l'API
             let response = await fetch (app.base_url + '/tags', {
                 method: 'POST',
                 body: data
             });
 
             if (response.status !== 201) {
+                // Si une erreur survient, on la récupère et on l'envoie au catch
                 let error = await response.json();
                 throw error;
             } else {
+                // Si tout va bien, on récupère le tag
                 let tag = await response.json();
+
+                // On crée le tag dans les trois listes du DOM
                 app.makeAddTagListInDOM(tag.id, tag.name);
                 app.makeEditTagListInDOM(tag.id, tag.name, tag.background_color, tag.text_color);
                 app.makeDeleteTagListInDOM(tag.id, tag.name);
 
+                // On réinitialise le formulaire
                 let form = document.querySelector('#addTagModal form');
                 form.querySelector('input[name="name"]').value = '';
                 form.querySelector('input[name="background_color"]').value = '#FFFFFF';
                 form.querySelector('input[name="text_color"]').value = '#000000';
             }
 
+            // On ferme la modale
             app.hideModals();
         }
 
@@ -336,28 +381,39 @@ const app = {
 
     handleAddTagToCardForm: async (event) => {
         try {
+            // On supprime le comportement par défaut
             event.preventDefault();
 
+            // On récupère les données du formulaire
             let data = new FormData(event.target);
 
+            // On récupère l'id de la carte
             let cardId = event.target.querySelector('input[name="card_id"]').value;
 
+            // On fait la requête à l'API
             let response = await fetch (app.base_url + '/cards/' + cardId + '/tags', {
                 method: 'POST',
                 body: data
             });
 
             if (response.status !== 200) {
+                // Si une erreur survient, on la récupère et on l'envoie au catch
                 let error = response.json();
                 throw error;
             } else {
+                // Si tout va bien, on récupère la carte
                 let card = await response.json();
+
+                // On vide le textContent de la carte
                 document.querySelector(`[data-card-id="${cardId}"]`).querySelector('.is-grouped-multiline').textContent = '';
+
+                // On recrée tous les tags contenus dans celle-ci
                 for (let tag of card.tags) {
                     app.makeTagInDOM(tag.id, tag.name, tag.background_color, tag.text_color, card.id);
                 }
             }
 
+            // On ferme la modale
             app.hideModals();
         }
 
@@ -369,27 +425,38 @@ const app = {
 
     handleEditTableForm: async (event) => {
         try {
+            // On supprime le comportement par défaut
             event.preventDefault();
 
+            // On récupère les données du formulaire
             let data = new FormData(event.target);
 
+            // On récupère l'id du tableau
             let tableId = document.querySelector('.section').getAttribute('data-table-id');
 
+            // On fait la requête à l'API
             let response = await fetch (app.base_url + '/tables/' + tableId, {
                 method: 'PATCH',
                 body: data
             });
 
             if (response.status !== 200) {
+                // Si une erreur survient, on la récupère et on l'envoie au catch
                 let error = await response.json();
                 throw error;
             } else {
+                // Si tout va bien, on récupère le tableau
                 let table = await response.json();
-                document.querySelector(`a[data-table-id="${tableId}"]`).textContent = table.name;
-                document.body.style.backgroundColor = table.background_color;
+
+                // On édite les noms de la liste déroulante
                 document.querySelector('.navbar-link').textContent = table.name;
+                document.querySelector(`a[data-table-id="${tableId}"]`).textContent = table.name;
+
+                // On définit la couleur de fond
+                document.body.style.backgroundColor = table.background_color;
             }
 
+            // On ferme la modale
             app.hideModals();
         }
 
@@ -401,30 +468,39 @@ const app = {
 
     handleEditListForm: async (event) => {
         try {
+            // On supprime le comportement par défaut
             event.preventDefault();
 
+            // On récupère les données du formulaire
             let data = new FormData(event.target);
 
+            // On récupère l'élément ciblé et l'id
             let listElement = event.target.closest('.list');
             let listId = listElement.getAttribute('data-list-id');
             
+            // On fait la requête à l'API
             let response = await fetch (app.base_url + '/lists/' + listId, {
                 method: 'PATCH',
                 body: data
             });
 
             if (response.status !== 200) {
+                // Si une erreur survient, on la récupère et on l'envoie au catch
                 let error = await response.json();
                 throw error;
             } else {
+                // Si tout va bien, on récupère la liste
                 let list = await response.json();
 
+                // On change le nom de la liste
                 listElement.querySelector('h2').textContent = list.name;
             }
 
+            // On affiche le h2 et on cache le formulaire
             listElement.querySelector('h2').classList.remove('is-hidden');
             listElement.querySelector('form').classList.add('is-hidden');
 
+            // On affiche les trois boutons
             listElement.querySelector('.button--edit-list').classList.remove('is-hidden');
             listElement.querySelector('.button--delete-list').classList.remove('is-hidden');
             listElement.querySelector('.button--add-card').classList.remove('is-hidden');
@@ -438,31 +514,40 @@ const app = {
 
     handleEditCardForm: async (event) => {
         try {
+            // On supprime le comportement par défaut
             event.preventDefault();
 
+            // On récupère les données du formulaire
             let data = new FormData(event.target);
 
+            // On récupère l'élément ciblé et l'id
             let cardElement = event.target.closest('.card');
             let cardId = cardElement.getAttribute('data-card-id');
 
+            // On fait la requête à l'API
             let response = await fetch (app.base_url + '/cards/' + cardId, {
                 method: 'PATCH',
                 body: data
             });
 
             if (response.status !== 200) {
+                // Si une erreur survient, on la récupère et on l'envoie au catch
                 let error = await response.json();
                 throw error;
             } else {
+                // Si tout va bien, on récupère la carte
                 let card = await response.json();
 
+                // On définit les nouvelles valeurs
                 cardElement.querySelector('.card-name').textContent = card.name;
                 cardElement.setAttribute('style', 'background-color: ' + card.background_color + '; color: ' + card.text_color);
             }
 
+            // On affiche la div et on cache le formulaire
             cardElement.querySelector('.card-name').classList.remove('is-hidden');
             cardElement.querySelector('form').classList.add('is-hidden');
 
+            // On affiche les trois boutons
             cardElement.querySelector('.button--edit-card').classList.remove('is-hidden');
             cardElement.querySelector('.button--delete-card').classList.remove('is-hidden');
             cardElement.querySelector('.button--add-tag').classList.remove('is-hidden');
@@ -476,25 +561,33 @@ const app = {
 
     handleEditTagForm: async (event) => {
         try {
+            // On supprime le comportement par défaut
             event.preventDefault();
 
+            // On récupère les données du formulaire
             let data = new FormData(event.target);
 
+            // On récupère l'id
             let tagId = event.target.querySelector('select[name="tagId"]').value;
 
+            // On fait la requête à l'API
             let response = await fetch (app.base_url + '/tags/' + tagId, {
                 method: 'PATCH',
                 body: data
             });
 
             if (response.status !== 200) {
+                // Si une erreur survient, on la récupère et on l'envoie au catch
                 let error = await response.json();
                 throw error;
             } else {
+                // Si tout va bien, on récupère le tag
                 let modifiedTag = await response.json();
                 
+                // On sélectionne tous les tags existants sur les cartes
                 let tags = document.querySelectorAll(`div[data-tag-id="${tagId}"]`);
 
+                // S'il y a des tags, on définit les nouvelles valeurs
                 if (tags) {
                     for (let tag of tags) {
                         tag.querySelector('span').textContent = modifiedTag.name;
@@ -502,17 +595,22 @@ const app = {
                     }
                 }
 
+                // On sélectionne le tag contenu dans la liste d'édition des tags
                 let option = document.querySelector(`#editTagList option[value="${tagId}"]`);
+
+                // On définit les attributs en fonction des nouvelles valeurs
                 option.setAttribute('name', modifiedTag.name);
                 option.setAttribute('backgroundColor', modifiedTag.background_color);
                 option.setAttribute('textColor', modifiedTag.text_color);
 
+                // On réinitialise le formulaire
                 document.getElementById('editTagList').value = '';
                 document.getElementById('editTagModal').querySelector('input[name="name"]').value = '';
                 document.getElementById('editTagModal').querySelector('input[name="background_color"]').value = '#FFFFFF';
                 document.getElementById('editTagModal').querySelector('input[name="text_color"]').value = '#000000';
             }
 
+            // On ferme la modale
             app.hideModals();
         }
         
@@ -524,32 +622,43 @@ const app = {
 
     handleDeleteTagFromAPIForm: async (event) => {
         try {
+            // On supprime le comportement par défaut
             event.preventDefault();
 
+            // On récupère l'id
             let tagId = event.target.querySelector('select[name="tagId"]').value;
 
+            // On fait la requête à l'API
             let response = await fetch (app.base_url + '/tags/' + tagId, {
                 method: 'DELETE'
             });
 
             if (response.status !== 200) {
+                // Si une erreur survient, on la récupère et on l'envoie au catch
                 let error = await response.json();
                 throw error;
             } else {
+                // Si tout va bien, on récupère le message
                 let message = await response.json();
-                console.log(message);
 
+                // On récupère toutes les balises option qui lui sont liés
                 let selects = document.querySelectorAll(`option[value="${tagId}"]`);
+
+                // On les supprime
                 for (let select of selects) {
                     select.parentNode.removeChild(select);
                 }
 
+                // On récupère tous les tags existants dans les cartes
                 let tags = document.querySelectorAll(`div[data-tag-id="${tagId}"]`);
+
+                // On les supprime
                 for (let tag of tags) {
                     tag.parentNode.removeChild(tag);
                 }
             }
 
+            // On ferme la modale
             app.hideModals();
         }
 
@@ -560,29 +669,49 @@ const app = {
     },
 
     handleDropList: (event) => {
+        // On récupère les évènements
         const targetColumn = event.to;
         const originColumn = event.from;
 
+        // On sélectionne toutes les listes
         let lists = originColumn.querySelectorAll('.list');
+
+        // On les update
         app.updateAllLists(lists);
 
+        // On gère le cas où la colonne ciblée est différente de la colonne d'origine
         if (originColumn !== targetColumn) {
+            // On sélectionne toutes les listes
             lists = targetColumn.querySelectorAll('.list');
+
+            // On les update
             app.updateAllLists(lists);
         }
     },
 
     handleDropCard: (event) => {
+        // On récupère les évènements
         const targetList = event.to;
         const originList = event.from;
 
+        // On sélectionne toutes les cartes
         let cards = originList.querySelectorAll('.box');
+
+        // On récupère l'id de la liste d'origine
         let listId = originList.closest('.list').getAttribute('data-list-id');
+
+        // On update les cartes
         app.updateAllCards(cards, listId);
 
+        // On gère le cas où la liste ciblée est différente de la liste d'origine
         if (originList !== targetList) {
+            // On sélectionne toutes les cartes
             cards = targetList.querySelectorAll('.box');
+
+            // On récupère l'id de la liste ciblée
             listId = targetList.closest('.list').getAttribute('data-list-id');
+
+            // On update les cartes
             app.updateAllCards(cards, listId);
         }
     },
@@ -739,22 +868,29 @@ const app = {
 
     updateAllLists: (lists) => {
         try {
+            // Pour chaque liste reçue, on boucle
             lists.forEach ( async (list, position) => {
+                // On récupère l'id de la liste
                 const listId = list.getAttribute('data-list-id');
 
+                // On crée un formulaire que l'on stocke dans data
                 let data = new FormData();
 
+                // On intègre une donnée aux data
                 data.set ('position', position);
 
+                // On fait la requête à l'API
                 let response = await fetch (app.base_url + '/lists/' + listId, {
                     method: 'PATCH',
                     body: data
                 });
 
                 if (response.status !== 200) {
+                    // Si une erreur survient, on la récupère et on l'envoie au catch
                     let error = await response.json();
                     throw error;
                 } else {
+                    // Si tout va bien, on récupère la liste
                     let list = await response.json();
                 }
             });
@@ -767,23 +903,30 @@ const app = {
 
     updateAllCards: (cards, listId) => {
         try {
+            // Pour chaque carte reçue, on boucle
             cards.forEach ( async (card, position) => {
+                // On récupère l'id de la carte
                 const cardId = card.getAttribute('data-card-id');
                 
+                // On crée un formulaire que l'on stocke dans data
                 let data = new FormData();
     
+                // On intègre des données aux data
                 data.set('position', position);
                 data.set('list_id', listId);
     
+                // On fait la requête à l'API
                 let response = await fetch (app.base_url + '/cards/' + cardId, {
                     method: 'PATCH',
                     body: data
                 });
     
                 if (response.status !== 200) {
+                    // Si une erreur survient, on la récupère et on l'envoie au catch
                     let error = await response.json();
                     throw error;
                 } else {
+                    // Si tout va bien, on récupère la carte
                     let card = await response.json();
                 }
             });
@@ -796,21 +939,30 @@ const app = {
 
     deleteTableFromDOM: async () => {
         try {
+            // On récupère l'id
             let tableId = document.querySelector('.section').getAttribute('data-table-id');
+
+            // On récupère l'élément ciblé
             let tableElement = document.querySelector(`a[data-table-id="${tableId}"]`);
 
+            // On fait la requête à l'API
             let response = await fetch (app.base_url + '/tables/' + tableId, {
                 method: 'DELETE'
             });
 
             if (response.status !== 200) {
+                // Si une erreur survient, on la récupère et on l'envoie au catch
                 let error = await response.json();
                 throw error;
             } else {
+                // Si tout va bien, on récupère le tableau
                 let table = await response.json();
-                console.log(table);
+
+                // On supprime le tableau
                 tableElement.parentNode.removeChild(tableElement);
-                location = './index.html';
+
+                // On redigirige sur le menu du kanban
+                location = './kanban.html';
             }
         }
 
@@ -822,19 +974,26 @@ const app = {
 
     deleteListFromDOM: async (event) => {
         try {
+            // On récupère l'élément ciblé
             let listElement = event.target.closest('.list');
+
+            // On récupère l'id
             let listId = listElement.getAttribute('data-list-id');
     
+            // On fait la requête à l'API
             let response = await fetch (app.base_url + '/lists/' + listId, {
                 method: 'DELETE'
             });
     
             if (response.status !== 200) {
+                // Si une erreur survient, on la récupère et on l'envoie au catch
                 let error = await response.json();
                 throw error;
             } else {
+                // Si tout va bien, on récupère la liste
                 let list = await response.json();
-                console.log(list);
+
+                // On la supprime
                 listElement.parentNode.removeChild(listElement);
             }
         }
@@ -847,19 +1006,26 @@ const app = {
 
     deleteCardFromDOM: async (event) => {
         try {
+            // On récupère l'élément ciblé
             let cardElement = event.target.closest('.card');
+
+            // On récupère l'id
             let cardId = cardElement.getAttribute('data-card-id');
 
+            // On fait la requête à l'API
             let response = await fetch (app.base_url + '/cards/' + cardId, {
                 method: 'DELETE'
             });
 
             if (response.status !== 200) {
+                // Si une erreur survient, on la récupère et on l'envoie au catch
                 let error = await response.json();
                 throw error;
             } else {
+                // Si tout va bien, on récupère la carte
                 let card = await response.json();
-                console.log(card);
+
+                // On la supprime
                 cardElement.parentNode.removeChild(cardElement);
             }
         }
@@ -872,19 +1038,29 @@ const app = {
 
     deleteTagFromDOM: async (event) => {
         try {
+            // On récupère l'élément ciblé
             let tagElement = event.target.closest('.control');
+
+            // On récupère son id
             let tagId = tagElement.getAttribute('data-tag-id');
+
+            // On récupère l'id de la carte
             let cardId = event.target.closest('.card').getAttribute('data-card-id');
 
+            // On fait la requête à l'API
             let response = await fetch (app.base_url + '/cards/' + cardId + '/tags/' + tagId, {
                 method: 'DELETE'
             });
 
             if (response.status !== 200) {
+                // Si une erreur survient, on la récupère et on l'envoie au catch
                 let error = await response.json();
                 throw error;
             } else {
+                // Si tout va bien, on récupère la carte
                 let card = await response.json()
+
+                // On supprime le tag
                 tagElement.parentNode.removeChild(tagElement);
             }
         }
@@ -896,14 +1072,27 @@ const app = {
     },
 
     showCreatedtable: (tableId, name, backgroundColor) => {
+            // On vide les listes existantes
             document.getElementById('lists').textContent = '';
+
+            // On définit la couleur de fond du body
             document.body.style.backgroundColor = backgroundColor;
-            document.querySelector('#editTableModal input[name="name"]').value =name;
+
+            // On définit les noms du tableau dans la barre de navigation
+            document.querySelector('#editTableModal input[name="name"]').value = name;
             document.querySelector('.navbar-link').textContent = name;
+
+            // On définit la couleur de fond dans l'input du formulaire
             document.querySelector('#editTableModal input[name="background_color"]').value = backgroundColor;
+
+            // On définit les attributs
             document.getElementById('table').setAttribute('data-table-id', tableId);
             document.querySelector('section').setAttribute('data-table-id', tableId);
+
+            // On récupère tous les boutons cachés
             let buttons = document.querySelectorAll('.button.is-hidden');
+
+            // On les affiche
             if (buttons) {
                 for (let button of buttons) {
                     button.classList.remove('is-hidden');
@@ -913,28 +1102,49 @@ const app = {
 
     showClickedTable: async (event) => {
         try {
+            // On vide les listes existantes
             document.getElementById('lists').textContent = '';
+
+            // On récupère l'élément ciblé
             let tableElement = event.target.closest('a');
+
+            // On récupère l'id
             let tableId = tableElement.getAttribute('data-table-id');
     
+            // On fait la requête à l'API
             let response = await fetch (app.base_url + '/tables/' + tableId);
     
             if (response.status !== 200) {
+                // Si une erreur survient, on la récupère et on l'envoie au catch
                 let error = await response.json();
                 throw error;
             } else {
+                // Si tout va bien, on récupère le tableau contenant les listes, cartes et tags
                 let table = await response.json();
+
+                // On définit la couleur de fond du body
                 document.body.style.backgroundColor = table.background_color;
+
+                // On définit les noms du tableau dans la barre de navigation
                 document.querySelector('#editTableModal input[name="name"]').value = table.name;
                 document.querySelector('.navbar-link').textContent = table.name;
+
+                // On définit la couleur de fond dans l'input du formulaire
                 document.querySelector('#editTableModal input[name="background_color"]').value = table.background_color;
+
+                // On définit les attributs
                 document.getElementById('table').setAttribute('data-table-id', table.id);
                 document.querySelector('section').setAttribute('data-table-id', table.id);
+
+                // On récupère tous les boutons cachés
                 let buttons = document.querySelectorAll('.button.is-hidden');
+
+                // On les affiche
                 for (let button of buttons) {
                     button.classList.remove('is-hidden');
                 }
 
+                // On crée les listes, les cartes et les tags
                 for (let list of table.lists) {
                     app.makeListInDOM(list.id, list.name);
 
@@ -961,14 +1171,18 @@ const app = {
 
     getTablesFromAPI: async () => {
         try {
+            // On fait la requête à l'API
             let response = await fetch (app.base_url + '/tables');
 
             if (response.status !== 200) {
+                // Si une erreur survient, on la récupère et on l'envoie au catch
                 let error = await response.json();
                 throw error;
             } else {
+                // Si tout va bien, on récupère les tableaux
                 let tables = await response.json();
 
+                // On crée les tableaux
                 for (let table of tables) {
                     app.makeTableListInDOM(table.id, table.name, table.background_color);
                 }
@@ -983,14 +1197,18 @@ const app = {
 
     getTagsFromAPI: async () => {
         try {
+            // On fait la requête à l'API
             let response = await fetch (app.base_url + '/tags');
 
             if (response.status !== 200) {
+                // Si une erreur survient, on la récupère et on l'envoie au catch
                 let error = await response.json();
                 throw error;
             } else {
+                // Si tout va bien, on récupère les tags
                 let tags = await response.json();
 
+                // On crée les tags dans les trois listes
                 for (let tag of tags) {
                     app.makeAddTagListInDOM(tag.id, tag.name);
                     app.makeEditTagListInDOM(tag.id, tag.name, tag.background_color, tag.text_color);
@@ -1007,14 +1225,16 @@ const app = {
 
     disconnectFromApp: async () => {
         try {
+            // On fait la requête à l'API
             let response = await fetch (app.base_url + '/disconnect');
 
             if (response.status !== 200) {
+                // Si une erreur survient, on la récupère et on l'envoie au catch
                 let error = await response.json();
                 throw error;
             } else {
+                // Si tout va bien, on recupère le message
                 let message = await response.json();
-                console.log(message);
             }
         }
 
@@ -1024,4 +1244,5 @@ const app = {
     }
 };
 
+// On crée un évènement qui se déclenchera au chargement du DOM
 document.addEventListener('DOMContentLoaded', app.init);
