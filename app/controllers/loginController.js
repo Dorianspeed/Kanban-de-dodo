@@ -71,7 +71,7 @@ const loginController = {
 
     disconnect: (request, response) => {
         request.session.user = false;
-        response.redirect('/login.html');
+        response.status(200).json('ok');
     }
 };
 

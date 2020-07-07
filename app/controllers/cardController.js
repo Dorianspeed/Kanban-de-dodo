@@ -75,8 +75,8 @@ const cardController = {
 
             // On vérifie que les champs sont bien valides
             if (name) {
-                if (!validator.isAlphanumeric(name)) {
-                    bodyErrors.push('Le champ nom ne doit contenir que des lettres et nombres');
+                if (validator.blacklist(name, '^\<|\>|\/|\&')) {
+                    bodyErrors.push('Le champ nom ne peut contenir les caractères "<" ">" "&" et "/"');
                 }
             }
 
@@ -161,8 +161,8 @@ const cardController = {
 
             // On vérifie que les champs sont bien valides
             if (name) {
-                if (!validator.isAlphanumeric(name)) {
-                    bodyErrors.push('Le champ nom ne doit contenir que des lettres et nombres');
+                if (validator.blacklist(name, '^\<|\>|\/|\&')) {
+                    bodyErrors.push('Le champ nom ne peut contenir les caractères "<" ">" "&" et "/"');
                 }
             }
 

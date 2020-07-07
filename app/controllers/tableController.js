@@ -78,7 +78,7 @@ const tableController = {
     createTable: async (request, response) => {
         try {
             // On déstructure le formulaire reçu
-            const { name, background_color, user_id } = request.body;
+            let { name, background_color, user_id } = request.body;
 
             // On initialise un tableau d'erreurs
             const bodyErrors = [];
@@ -98,8 +98,8 @@ const tableController = {
 
             // On vérifie que les champs sont bien valides
             if (name) {
-                if (!validator.isAlphanumeric(name)) {
-                    bodyErrors.push('Le champ nom ne doit contenir que des lettres et nombres');
+                if (validator.blacklist(name, '^\<|\>|\/|\&')) {
+                    bodyErrors.push('Le champ nom ne peut contenir les caractères "<" ">" "&" et "/"');
                 }
             }
 
@@ -163,8 +163,8 @@ const tableController = {
 
             // On vérifie que les champs sont bien valides
             if (name) {
-                if (!validator.isAlphanumeric(name)) {
-                    bodyErrors.push('Le champ nom ne doit contenir que des lettres et nombres');
+                if (validator.blacklist(name, '^\<|\>|\/|\&')) {
+                    bodyErrors.push('Le champ nom ne peut contenir les caractères "<" ">" "&" et "/"');
                 }
             }
 

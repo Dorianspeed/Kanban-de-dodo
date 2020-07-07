@@ -70,14 +70,14 @@ const userController = {
 
             // On vérifie que les champs first_name et last_name ne contiennent que des lettres
             if (first_name) {
-                if (!validator.isAlpha(first_name)) {
-                    bodyErrors.push('Le champ prénom ne doit contenir que des lettres');
-                }                
+                if (validator.blacklist(first_name, '^\<|\>|\/|\&')) {
+                    bodyErrors.push('Le champ prénom ne peut contenir les caractères "<" ">" "&" et "/"');
+                }            
             }
 
             if (last_name) {
-                if (!validator.isAlpha(last_name)) {
-                    bodyErrors.push('Le champ nom ne doit contenir que des lettres');
+                if (validator.blacklist(last_name, '^\<|\>|\/|\&')) {
+                    bodyErrors.push('Le champ nom ne peut contenir les caractères "<" ">" "&" et "/"');
                 }
             }
 
@@ -153,14 +153,14 @@ const userController = {
 
             // On vérifie que les champs first_name et last_name ne contiennent que des lettres
             if (first_name) {
-                if (!validator.isAlpha(first_name)) {
-                    bodyErrors.push('Le champ prénom ne doit contenir que des lettres');
-                }                
+                if (validator.blacklist(first_name, '^\<|\>|\/|\&')) {
+                    bodyErrors.push('Le champ prénom ne peut contenir les caractères "<" ">" "&" et "/"');
+                }              
             }
 
             if (last_name) {
-                if (!validator.isAlpha(last_name)) {
-                    bodyErrors.push('Le champ nom ne doit contenir que des lettres');
+                if (validator.blacklist(last_name, '^\<|\>|\/|\&')) {
+                    bodyErrors.push('Le champ nom ne peut contenir les caractères "<" ">" "&" et "/"');
                 }
             }
 
