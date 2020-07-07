@@ -1,5 +1,7 @@
+// Importation de la dépendance
 const { Sequelize } = require('sequelize');
 
+// Connexion à la database
 const sequelize = new Sequelize(process.env.PG_URL, {
     define: {
         underscored: true,
@@ -8,4 +10,5 @@ const sequelize = new Sequelize(process.env.PG_URL, {
     }
 });
 
+// Exportation du module
 module.exports = sequelize

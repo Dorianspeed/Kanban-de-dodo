@@ -1,3 +1,4 @@
+// Importation des classes
 const User = require('./user');
 const Table = require('./table');
 const List = require('./list');
@@ -88,4 +89,5 @@ Tag.belongsToMany(Card, {
     timestamps: false
 });
 
+// Exportation des différentes classes
 module.exports = { User, Table, List, Card, Tag };

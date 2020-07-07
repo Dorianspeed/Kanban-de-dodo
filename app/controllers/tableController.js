@@ -1,10 +1,14 @@
+// Importation des dépendances nécessaires
 const { User, Table } = require('../models');
 const validator = require('validator');
 
 const tableController = {
     getAllTables: async (request, response) => {
         try {
+            // On récupère tous les tableaux
             const tables = await Table.findAll();
+
+            // On les envoie au front
             response.status(200).json(tables);
         }
 
@@ -15,53 +19,58 @@ const tableController = {
     },
 
     getOneTable: async (request, response) => {
-       try {
-           // On parse l'id reçu en un nombre entier
-           const tableId = parseInt(request.params.id, 10);
-    
-           // On vérifie que l'id est bien de type number
-           if (isNaN(tableId)) {
-               response.status(400).json('L\'id spécifié doit être de type number');
-               return;
-           }
+        try {
+            // On parse l'id reçu en un nombre entier
+            const tableId = parseInt(request.params.id, 10);
+        
+            // On vérifie que l'id est bien de type number
+            if (isNaN(tableId)) {
+                response.status(400).json('L\'id spécifié doit être de type number');
+                return;
+            }
 
-           const table = await Table.findByPk(tableId, {
-               include: [{
-                   association: 'lists',
-                   include: [{
-                       association: 'cards',
-                       include: ['tags']
-                   }]
-               }]
-           });
+            // On récupère le tableau avec ses associations
+            const table = await Table.findByPk(tableId, {
+                include: [{
+                    association: 'lists',
+                    include: [{
+                        association: 'cards',
+                        include: ['tags']
+                    }]
+                }]
+            });
 
-           if (table) {
-               response.status(200).json(table);
-           } else {
-               response.status(404).json(`La table avec l'id ${tableId} n'existe pas`);
-           }
-       } 
+            // S'il y a un tableau, on l'envoie au front, sinon une petite erreur
+            if (table) {
+                response.status(200).json(table);
+            } else {
+                response.status(404).json(`La table avec l'id ${tableId} n'existe pas`);
+            }
+        } 
 
-       catch (error) {
-           console.trace(error);
-           response.status(500).json(error);
-       }   
+        catch (error) {
+            console.trace(error);
+            response.status(500).json(error);
+        }   
     },
 
+    //! Méthode à revoir
     getAllTablesFromOneUser: async (request, response) => {
         try {
             // On récupère l'id stocké en locals
-            const userId = localStorage.user.id;
+            const userId = localStorage.getItem('user');
 
             // On vérifie que c'est bien un number
             if (isNaN(parseInt(userId, 10))) {
                 response.status(400).json('L\'id spécifié doit être de type number');
             }
 
+            // On récupère l'utilisateur avec les tableaux qui lui sont attachés
             const user = User.findByPk(userId, {
                 include: ['tables']
             });
 
+            // S'il y a un utilisateur, on l'envoie au front, sinon une petite erreur
             if (user) {
                 response.status(200).json(user);
             } else {
@@ -128,6 +137,7 @@ const tableController = {
                 user_id
             });
 
+            // On envoie le nouveau tableau au front
             response.status(201).json(newTable);
         }
 
@@ -191,6 +201,7 @@ const tableController = {
             // On enregistre les nouvelles données
             await table.save();
 
+            // On envoie le tableau au front
             response.status(200).json(table);
         }
 
@@ -268,8 +279,10 @@ const tableController = {
                 return;
             }
 
+            // On récupère le tableau
             const table = await Table.findByPk(tableId);
 
+            // S'il existe, on le supprime, sinon une petite erreur
             if (table) {
                 await table.destroy();
                 response.status(200).json('Le tableau a bien été supprimé');
@@ -285,4 +298,5 @@ const tableController = {
     }
 };
 
+// Exportation du module
 module.exports = tableController;

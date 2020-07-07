@@ -1,3 +1,4 @@
+// Importation des dépendances
 const { User } = require('../models');
 const validator = require('validator');
 const bcrypt = require('bcrypt')
@@ -5,7 +6,10 @@ const bcrypt = require('bcrypt')
 const userController = {
     getAllUsers: async (request, response) => {
         try {
+            // On récupère tous les utilisateurs
             const users = await User.findAll();
+
+            // On les envoie au front
             response.status(200).json(users);
         }
         
@@ -26,10 +30,12 @@ const userController = {
                 return;
             }
 
+            // On récupère l'utilisateur
             const user = await User.findByPk(userId, {
                 include: ['tables', 'lists', 'cards', 'tags']
             });
 
+            // S'il existe, on l'envoie au front, sinon une petite erreur
             if (user) {
                 response.status(200).json(user);
             } else {
@@ -129,6 +135,7 @@ const userController = {
                 password: encryptedPassword
             });
 
+            // On envoie le nouvel utilisateur au front
             response.status(201).json(newUser);
         }
 
@@ -225,6 +232,7 @@ const userController = {
             // On enregistre les nouvelles données
             await user.save();
 
+            // On envoie l'utilisateur au front
             response.status(200).json(user);
         }
 
@@ -304,8 +312,10 @@ const userController = {
                 return;
             }
 
+            // On récupère l'utilisateur
             const user = await User.findByPk(userId);
 
+            // S'il existe, on le supprime, sinon une petite erreur
             if (user) {
                 await user.destroy();
                 response.status(200).json('L\'utilisateur a bien été supprimé');
@@ -321,4 +331,5 @@ const userController = {
     }
 };
 
+// Exportation du module
 module.exports = userController;

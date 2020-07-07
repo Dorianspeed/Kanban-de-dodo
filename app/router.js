@@ -1,6 +1,8 @@
+// Importation des dépendances nécessaires
 const express = require('express');
 const router = express.Router();
 
+// Importation des controllers
 const userController = require('./controllers/userController');
 const tableController = require('./controllers/tableController');
 const listController = require('./controllers/listController');

@@ -1,6 +1,8 @@
+// Importation des dépendances
 const { DataTypes, Model } = require('sequelize');
 const sequelize = require('../database');
 
+// Création de la classe
 class List extends Model {};
 
 List.init({
@@ -11,4 +13,5 @@ List.init({
     tableName: "list"
 });
 
+// Exportation de la classe
 module.exports = List;

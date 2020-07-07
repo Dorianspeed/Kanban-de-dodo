@@ -1,10 +1,14 @@
+// Importation des dépendances nécessaires
 const { List } = require('../models');
 const validator = require('validator');
 
 const listController = {
     getAllLists: async (request, response) => {
         try {
+            // On récupère toutes les listes
             const lists = await List.findAll();
+
+            // On les envoie au front
             response.status(200).json(lists);
         }
 
@@ -24,8 +28,10 @@ const listController = {
                 response.status(400).json('L\'id spécifié doit être de type number');
             }
 
+            // On récupère la liste
             const list = await List.findByPk(listId);
 
+            // S'il y a une liste, on l'envoie au front, sinon une petite erreur
             if (list) {
                 response.status(200).json(list);
             } else {
@@ -103,6 +109,7 @@ const listController = {
                 table_id
             });
 
+            // On envoie la nouvelle liste au front
             response.status(201).json(newList);
         }
 
@@ -177,6 +184,7 @@ const listController = {
             // On enregistre les nouvelles données
             await list.save();
 
+            // On envoie la liste au front
             response.status(200).json(list);
         }
 
@@ -255,8 +263,10 @@ const listController = {
                 return;
             }
 
+            // On récupère la liste
             const list = await List.findByPk(listId);
 
+            // S'il y a une liste, on la supprime, sinon une petite erreur
             if (list) {
                 await list.destroy();
                 response.status(200).json('La liste a bien été supprimée');
@@ -272,4 +282,5 @@ const listController = {
     }
 };
 
+// Exportation du module
 module.exports = listController;

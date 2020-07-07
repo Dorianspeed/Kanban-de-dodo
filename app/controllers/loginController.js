@@ -1,3 +1,4 @@
+// Importation des dépendances nécessaires
 const { User } = require('../models');
 const validator = require('validator');
 const bcrypt = require('bcrypt');
@@ -59,7 +60,7 @@ const loginController = {
             // On supprime le mot de passe qui lui est associé
             delete request.session.user.password;
 
-            // On redirige vers l'index.html
+            // On envoie un message au front
             response.status(200).json('ok');
         }
 
@@ -70,9 +71,13 @@ const loginController = {
     },
 
     disconnect: (request, response) => {
+        // On met la session utilisateur en "false"
         request.session.user = false;
+
+        // On envoie un message au front
         response.status(200).json('ok');
     }
 };
 
+// Exportation du module
 module.exports = loginController;

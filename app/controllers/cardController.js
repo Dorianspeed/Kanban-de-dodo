@@ -1,10 +1,14 @@
+// Importation des dépendances nécessaires
 const { Card } = require('../models');
 const validator = require('validator');
 
 const cardController = {
     getAllCards: async (request, Response) => {
         try {
-            const cards = await Card.find();
+            // On récupère toutes les cartes
+            const cards = await Card.findAll();
+
+            // On les envoie au front
             response.status(200).json(cards);
         }
 
@@ -25,8 +29,10 @@ const cardController = {
                 return;
             }
 
+            // On récupère la carte
             const card = await Card.findByPk(cardId);
 
+            // S'il y a une carte, on l'envoie au front sinon, une petite erreur
             if (card) {
                 response.status(200).json(card);
             } else {
@@ -126,6 +132,7 @@ const cardController = {
                 list_id
             });
 
+            // On l'envoie au front
             response.status(201).json(newCard);
         }
 
@@ -220,6 +227,7 @@ const cardController = {
             // On enregistre les nouvelles données
             await card.save();
 
+            // On envoie la carte au front
             response.status(200).json(card);
         }
 
@@ -300,8 +308,10 @@ const cardController = {
                 return;
             }
 
+            // On récupère la carte
             const card = await Card.findByPk(cardId);
 
+            // S'il y a une carte, on la supprime, sinon une petite erreur
             if (card) {
                 await card.destroy();
                 response.status(200).json('La carte a été supprimée');
@@ -317,4 +327,5 @@ const cardController = {
     }
 };
 
+// Exportation du module
 module.exports = cardController;

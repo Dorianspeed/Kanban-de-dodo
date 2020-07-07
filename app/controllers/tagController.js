@@ -1,10 +1,14 @@
+// Importation des dépendances
 const { Card, Tag } = require('../models');
 const validator = require('validator');
 
 const tagController = {
     getAllTags: async (request, response) => {
         try {
+            // On récupère tous les tags
             const tags = await Tag.findAll();
+
+            // On les envoie au front
             response.status(200).json(tags);
         }
 
@@ -25,8 +29,10 @@ const tagController = {
                 return;
             }
 
+            // On récupère le tag
             const tag = await Tag.findByPk(tagId);
 
+            // S'il existe, on l'envoie au front, sinon une petite erreur
             if (tag) {
                 response.status(200).json(tag);
             } else {
@@ -103,6 +109,7 @@ const tagController = {
                 user_id
             });
 
+            // On envoie le nouveau tag au front
             response.status(201).json(newTag);
         }
         
@@ -177,6 +184,7 @@ const tagController = {
             // On enregistre les nouvelles données
             await tag.save();
 
+            // On envoie le tag au front
             response.status(200).json(tag);
         }
 
@@ -255,8 +263,10 @@ const tagController = {
                 return;
             }
 
+            // On récupère le tag
             const tag = await Tag.findByPk(tagId);
 
+            // S'il existe, on le supprime, sinon on une petite erreur
             if (tag) {
                 await tag.destroy();
                 response.status(200).json('Le tag a bien été supprimé');
@@ -310,6 +320,7 @@ const tagController = {
                 include: ['tags']
             });
     
+            // On envoie la carte au front
             response.status(200).json(card);
         }
 
@@ -356,6 +367,7 @@ const tagController = {
             // On récupère la carte dans la BDD qui a subi une mise à jour
             card = await Card.findByPk(cardId);
 
+            // On envoie la carte au front
             response.status(200).json(card);
         }
 
@@ -366,4 +378,5 @@ const tagController = {
     }
 };
 
+// Exporation du module
 module.exports = tagController;
