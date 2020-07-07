@@ -4,8 +4,6 @@ const router = require('./app/router');
 const session = require('express-session');
 const multer = require('multer');
 const bodyParser = multer();
-const loginMiddleware = require('./app/middlewares/login');
-const userMiddleware = require('./app/middlewares/user');
 
 const app = express();
 const PORT = process.env.PORT || 5050;
@@ -26,8 +24,6 @@ app.use(session({
     }
 }));
 
-// app.use(loginMiddleware);
-// app.use(userMiddleware);
 app.use(router);
 
 app.listen(PORT, () => {

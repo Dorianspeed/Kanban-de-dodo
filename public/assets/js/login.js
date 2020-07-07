@@ -47,7 +47,7 @@ const app = {
                 // Si le status est correct, on redirige
                 let user = await response.json();
                 console.log(user);
-                location = './index.html';
+                location = './kanban.html'
             }
         }
 

@@ -7,7 +7,7 @@ const listController = require('./controllers/listController');
 const cardController = require('./controllers/cardController');
 const tagController = require('./controllers/tagController');
 const loginController = require('./controllers/loginController');
-const error404Middleware = require('./middlewares/error404');
+const loginMiddleware = require('./middlewares/login');
 
 // User
 router.get('/users', userController.getAllUsers);
@@ -64,8 +64,8 @@ router.post('/login', loginController.login);
 
 router.get('/disconnect', loginController.disconnect);
 
-// 404
+// Login
 
-router.use(error404Middleware);
+router.use(loginMiddleware);
 
 module.exports = router;

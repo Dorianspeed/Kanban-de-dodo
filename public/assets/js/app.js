@@ -1009,8 +1009,7 @@ const app = {
                 throw error;
             } else {
                 let message = await response.json();
-                console.log(response);
-                location = './login.html'
+                console.log(message);
             }
         }
 

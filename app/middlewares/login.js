@@ -1,6 +1,6 @@
 const loginMiddleware = (request, response, next) => {
-    if (!request.locals.user) {
-        response.redirect('/login.html');
+    if (!request.session.user) {
+        response.redirect('./login.html');
     } else {
         next();
     }
