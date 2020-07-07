@@ -595,6 +595,16 @@ const app = {
                     }
                 }
 
+                // On sélection tous les tags existants dans les listes
+                let tagsInForm = document.querySelectorAll(`option[value="${tagId}"]`)
+
+                // S'il y a des tags, on définit le nouveau nom
+                if (tagsInForm) {
+                    for (let tagInForm of tagsInForm) {
+                        tagInForm.textContent = modifiedTag.name;
+                    }
+                }
+
                 // On sélectionne le tag contenu dans la liste d'édition des tags
                 let option = document.querySelector(`#editTagList option[value="${tagId}"]`);
 
