@@ -1,6 +1,7 @@
 const app = {
     init: () => {
         app.addListenerToActions();
+        app.addResponsiveBurgerEvent();
     },
 
     base_url: 'http://localhost:3000',
@@ -67,6 +68,15 @@ const app = {
 
         // On l'insère dans la liste
         document.querySelector('ul').appendChild(newError);
+    },
+
+    addResponsiveBurgerEvent: () => {
+        // On récupère le burger et on lui ajoute un event
+        document.querySelector('.navbar-burger').addEventListener('click', () => {
+            // On ajoute la classe "is-active" sur les deux élements
+            document.querySelector('.navbar-burger').classList.toggle('is-active');
+            document.querySelector('.navbar-menu').classList.toggle('is-active');
+        });
     }
 };
 

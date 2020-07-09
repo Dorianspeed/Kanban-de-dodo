@@ -120,4 +120,6 @@ router.get('/tags', tagController.getAllTags);
 router.get('/tags/:id', tagController.getOneTag);
 router.put('/tags/:id?', tagController.createOrUdpate);
 */
+
+// Exportation du module
 module.exports = router;
