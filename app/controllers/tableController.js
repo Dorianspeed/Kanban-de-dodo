@@ -54,28 +54,33 @@ const tableController = {
         }   
     },
 
-    //! Méthode à revoir
     getAllTablesFromOneUser: async (request, response) => {
         try {
-            // On récupère l'id stocké en locals
-            const userId = localStorage.getItem('user');
+            // On parse l'id reçu par la session
+            let userId = parseInt(request.session.user, 10);
 
-            // On vérifie que c'est bien un number
-            if (isNaN(parseInt(userId, 10))) {
+            // On vérifie que l'id est bien de type number
+            if (isNaN(userId)) {
                 response.status(400).json('L\'id spécifié doit être de type number');
+                return;
             }
 
-            // On récupère l'utilisateur avec les tableaux qui lui sont attachés
-            const user = User.findByPk(userId, {
-                include: ['tables']
+            // On récupère les tableaux avec l'id de l'utilisateur
+            const table = await Table.findAll({
+                where: {
+                    user_id: userId
+                },
+                include: [{
+                    association: 'lists',
+                    include: [{
+                        association: 'cards',
+                        include: ['tags']
+                    }]
+                }]
             });
 
-            // S'il y a un utilisateur, on l'envoie au front, sinon une petite erreur
-            if (user) {
-                response.status(200).json(user);
-            } else {
-                response.status(404).json(`L'utilisateur avec l'id ${userId} n'existe pas`);
-            }
+            // On envoie les tableaux au front
+            response.status(200).json(table);
         }
 
         catch (error) {
@@ -86,8 +91,17 @@ const tableController = {
 
     createTable: async (request, response) => {
         try {
+            // On parse l'id reçu par la session
+            const user_id = parseInt(request.session.user, 10);
+
+            // On vérifie que l'id est bien de type number
+            if (isNaN(user_id)) {
+                response.status(400).json('L\'id spécifié doit être de type number');
+                return;
+            }
+
             // On déstructure le formulaire reçu
-            let { name, background_color, user_id } = request.body;
+            let { name, background_color } = request.body;
 
             // On initialise un tableau d'erreurs
             const bodyErrors = [];
@@ -101,10 +115,6 @@ const tableController = {
                 bodyErrors.push('Le champ couleur de fond ne peut être vide');
             }
 
-            if (!user_id) {
-                bodyErrors.push('Le champ id de l\'utilisateur ne peut être vide');
-            }
-
             // On vérifie que les champs sont bien valides
             if (name) {
                 if (validator.blacklist(name, '^\<|\>|\/|\&')) {
@@ -115,12 +125,6 @@ const tableController = {
             if (background_color) {
                 if (!validator.isHexColor(background_color)) {
                     bodyErrors.push('Le champ couleur de fond doit respecter le format hexadécimal');
-                }
-            }
-
-            if(user_id) {
-                if (isNaN(parseInt(user_id, 10))) {
-                    bodyErrors.push('Le champ id de l\'utilisateur doit être de type number');
                 }
             }
 

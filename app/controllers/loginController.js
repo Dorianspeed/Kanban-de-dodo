@@ -35,7 +35,7 @@ const loginController = {
             }
 
             // On récupère l'utilisateur dans la BDD
-            const user = await User.findOne({
+            let user = await User.findOne({
                 where: {email: email}
             });
 
@@ -54,12 +54,9 @@ const loginController = {
                 return;
             }
 
-            // Si tout va bien, on stocke l'utilisateur en session
-            request.session.user = user;
-
-            // On supprime le mot de passe qui lui est associé
-            delete request.session.user.password;
-
+            // Si tout va bien, on stocke l'id de l'utilisateur en session
+            request.session.user = user.id;
+            
             // On envoie un message au front
             response.status(200).json('ok');
         }
@@ -71,11 +68,14 @@ const loginController = {
     },
 
     disconnect: (request, response) => {
-        // On met la session utilisateur en "false"
-        request.session.user = false;
+        // On met détruit la session
+        request.session.destroy();
 
         // On envoie un message au front
         response.status(200).json('ok');
+
+        // On redirige vers le login
+        location = '/login';
     }
 };
 

@@ -80,7 +80,7 @@ const app = {
         document.getElementById('addTableModal').classList.add('is-active');
     },
 
-    showAddListModal: (event) => {
+    showAddListModal: () => {
         // On récupère l'id de la table
         let tableId = document.getElementById('table').getAttribute('data-table-id');
         
@@ -196,12 +196,12 @@ const app = {
             // On récupère les données du formulaire
             let data = new FormData(event.target);
 
-            // On intègre une donnée aux data
-            data.set('user_id', 1);
-
             // On fait la requête à l'API
             let response = await fetch (app.base_url + '/tables', {
                 method: 'POST',
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                },
                 body: data
             });
 
@@ -246,11 +246,13 @@ const app = {
 
             // On intégre des données aux data
             data.set('position', numberOfLists);
-            data.set('user_id', 1);
 
             // On fait la requête à l'API
             let response = await fetch (app.base_url + '/lists', {
                 method: 'POST',
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                },
                 body: data
             });
 
@@ -296,11 +298,13 @@ const app = {
 
             // On intègre les données aux data
             data.set('position', numberOfCards);
-            data.set('user_id', 1);
 
             // On fait la requête à l'API
             let response = await fetch (app.base_url + '/cards', {
                 method: 'POST',
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                },
                 body: data
             });
 
@@ -340,12 +344,12 @@ const app = {
             // On récupère les données du formulaire
             let data = new FormData(event.target);
 
-            // On intègre une donnée aux data
-            data.set('user_id', 1);
-
             // On fait la requête à l'API
             let response = await fetch (app.base_url + '/tags', {
                 method: 'POST',
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                },
                 body: data
             });
 
@@ -393,6 +397,9 @@ const app = {
             // On fait la requête à l'API
             let response = await fetch (app.base_url + '/cards/' + cardId + '/tags', {
                 method: 'POST',
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                },
                 body: data
             });
 
@@ -437,6 +444,9 @@ const app = {
             // On fait la requête à l'API
             let response = await fetch (app.base_url + '/tables/' + tableId, {
                 method: 'PATCH',
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                },
                 body: data
             });
 
@@ -481,6 +491,9 @@ const app = {
             // On fait la requête à l'API
             let response = await fetch (app.base_url + '/lists/' + listId, {
                 method: 'PATCH',
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                },
                 body: data
             });
 
@@ -527,6 +540,9 @@ const app = {
             // On fait la requête à l'API
             let response = await fetch (app.base_url + '/cards/' + cardId, {
                 method: 'PATCH',
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                },
                 body: data
             });
 
@@ -573,6 +589,9 @@ const app = {
             // On fait la requête à l'API
             let response = await fetch (app.base_url + '/tags/' + tagId, {
                 method: 'PATCH',
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                },
                 body: data
             });
 
@@ -640,7 +659,10 @@ const app = {
 
             // On fait la requête à l'API
             let response = await fetch (app.base_url + '/tags/' + tagId, {
-                method: 'DELETE'
+                method: 'DELETE',
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                }
             });
 
             if (response.status !== 200) {
@@ -892,6 +914,9 @@ const app = {
                 // On fait la requête à l'API
                 let response = await fetch (app.base_url + '/lists/' + listId, {
                     method: 'PATCH',
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest"
+                    },
                     body: data
                 });
 
@@ -928,6 +953,9 @@ const app = {
                 // On fait la requête à l'API
                 let response = await fetch (app.base_url + '/cards/' + cardId, {
                     method: 'PATCH',
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest"
+                    },
                     body: data
                 });
     
@@ -957,7 +985,10 @@ const app = {
 
             // On fait la requête à l'API
             let response = await fetch (app.base_url + '/tables/' + tableId, {
-                method: 'DELETE'
+                method: 'DELETE',
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                }
             });
 
             if (response.status !== 200) {
@@ -972,7 +1003,7 @@ const app = {
                 tableElement.parentNode.removeChild(tableElement);
 
                 // On redigirige sur le menu du kanban
-                location = './kanban.html';
+                location = '/kanban';
             }
         }
 
@@ -992,7 +1023,10 @@ const app = {
     
             // On fait la requête à l'API
             let response = await fetch (app.base_url + '/lists/' + listId, {
-                method: 'DELETE'
+                method: 'DELETE',
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                }
             });
     
             if (response.status !== 200) {
@@ -1024,7 +1058,10 @@ const app = {
 
             // On fait la requête à l'API
             let response = await fetch (app.base_url + '/cards/' + cardId, {
-                method: 'DELETE'
+                method: 'DELETE',
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                }
             });
 
             if (response.status !== 200) {
@@ -1059,7 +1096,10 @@ const app = {
 
             // On fait la requête à l'API
             let response = await fetch (app.base_url + '/cards/' + cardId + '/tags/' + tagId, {
-                method: 'DELETE'
+                method: 'DELETE',
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                }
             });
 
             if (response.status !== 200) {
@@ -1122,7 +1162,11 @@ const app = {
             let tableId = tableElement.getAttribute('data-table-id');
     
             // On fait la requête à l'API
-            let response = await fetch (app.base_url + '/tables/' + tableId);
+            let response = await fetch (app.base_url + '/tables/' + tableId, {
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                }
+            });
     
             if (response.status !== 200) {
                 // Si une erreur survient, on la récupère et on l'envoie au catch
@@ -1182,7 +1226,11 @@ const app = {
     getTablesFromAPI: async () => {
         try {
             // On fait la requête à l'API
-            let response = await fetch (app.base_url + '/tables');
+            let response = await fetch (app.base_url + '/userTables', {
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                }
+            });
 
             if (response.status !== 200) {
                 // Si une erreur survient, on la récupère et on l'envoie au catch
@@ -1208,7 +1256,11 @@ const app = {
     getTagsFromAPI: async () => {
         try {
             // On fait la requête à l'API
-            let response = await fetch (app.base_url + '/tags');
+            let response = await fetch (app.base_url + '/userTags', {
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                }
+            });
 
             if (response.status !== 200) {
                 // Si une erreur survient, on la récupère et on l'envoie au catch
@@ -1236,7 +1288,11 @@ const app = {
     disconnectFromApp: async () => {
         try {
             // On fait la requête à l'API
-            let response = await fetch (app.base_url + '/disconnect');
+            let response = await fetch (app.base_url + '/disconnect', {
+                headers: {
+                    "X-Requested-With": "XMLHttpRequest"
+                }
+            });
 
             if (response.status !== 200) {
                 // Si une erreur survient, on la récupère et on l'envoie au catch
@@ -1245,6 +1301,7 @@ const app = {
             } else {
                 // Si tout va bien, on recupère le message
                 let message = await response.json();
+                location = '/login';
             }
         }
 

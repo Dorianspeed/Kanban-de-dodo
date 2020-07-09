@@ -26,7 +26,7 @@ const userController = {
     
             // On vérifie que l'id est bien de type number
             if (isNaN(userId)) {
-                response.status(400).json('L\id spécifié doit être de type number');
+                response.status(400).json('L\'id spécifié doit être de type number');
                 return;
             }
 

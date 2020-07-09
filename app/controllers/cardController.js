@@ -48,8 +48,17 @@ const cardController = {
 
     createCard: async (request, response) => {
         try {
+            // On parse l'id reçu par la session
+            const user_id = parseInt(request.session.user, 10);
+
+            // On vérifie que l'id est bien de type number
+            if (isNaN(user_id)) {
+                response.status(400).json('L\'id spécifié doit être de type number');
+                return;
+            }
+
             // On déstructure le formulaire reçu
-            const { name, position, background_color, text_color, user_id, list_id } = request.body;
+            const { name, position, background_color, text_color, list_id } = request.body;
 
             // On initialise un tableau d'erreurs
             const bodyErrors = [];
@@ -69,10 +78,6 @@ const cardController = {
 
             if (!text_color) {
                 bodyErrors.push('Le champ couleur de texte ne peut être vide');
-            }
-
-            if (!user_id) {
-                bodyErrors.push('Le champ id de l\'utilisateur ne peut être vide');
             }
 
             if (!list_id) {
@@ -101,12 +106,6 @@ const cardController = {
             if (text_color) {
                 if (!validator.isHexColor(text_color)) {
                     bodyErrors.push('Le champ couleur de texte doit respecter le format hexadécimal');
-                }
-            }
-
-            if (user_id) {
-                if (isNaN(parseInt(user_id, 10))) {
-                    bodyErrors.push('Le champ id de l\'utilisateur doit être de type number');
                 }
             }
 
