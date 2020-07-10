@@ -6,6 +6,6 @@ body {
     overflow-x: auto;
 }
 
-.cursor {
-    cursor: pointer;
+form.is-hidden {
+    z-index: 99;
 }
