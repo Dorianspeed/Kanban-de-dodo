@@ -11,34 +11,34 @@ const app = {
 
     addListenerToActions: () => {
         // Bouton "Ajouter un tableau"
-        document.getElementById('addTableButton').addEventListener('click', app.showAddTableModal);
-
+        document.getElementById('addTableButton').addEventListener('touchstart', app.showAddTableModal);
+        
         // Bouton "Ajouter une liste"
-        document.getElementById('addListButton').addEventListener('click', app.showAddListModal);
+        document.getElementById('addListButton').addEventListener('touchstart', app.showAddListModal);
 
         // Bouton "Ajouter un nouveau tag"
-        document.getElementById('addTagButton').addEventListener('click', app.showAddTagModal);
+        document.getElementById('addTagButton').addEventListener('touchstart', app.showAddTagModal);
 
         // Bouton "Modifier un tag"
-        document.getElementById('editTagButton').addEventListener('click', app.showEditTagModal);
+        document.getElementById('editTagButton').addEventListener('touchstart', app.showEditTagModal);
 
         // Bouton "Supprimer un tag"
-        document.getElementById('deleteTagButton').addEventListener('click', app.showDeleteTagModal);
+        document.getElementById('deleteTagButton').addEventListener('touchstart', app.showDeleteTagModal);
 
         // Bouton "Fermer les modales"
         let modals = document.querySelectorAll('.close');
         for (let modal of modals) {
-            modal.addEventListener('click', app.hideModals);
+            modal.addEventListener('touchstart', app.hideModals);
         }
 
         // Bouton "Modifier le tableau"
-        document.getElementById('editTableButton').addEventListener('click', app.showEditTableModal);
+        document.getElementById('editTableButton').addEventListener('touchstart', app.showEditTableModal);
 
         // Bouton "Supprimer le tableau"
-        document.getElementById('deleteTableButton').addEventListener('click', app.deleteTableFromDOM);
+        document.getElementById('deleteTableButton').addEventListener('touchstart', app.deleteTableFromDOM);
 
         // Bouton "Se déconnecter"
-        document.getElementById('disconnect').addEventListener('click', app.disconnectFromApp);
+        document.getElementById('disconnect').addEventListener('touchstart', app.disconnectFromApp);
 
         // Formulaire "Ajouter un tableau"
         document.querySelector('#addTableModal form').addEventListener('submit', app.handleAddTableForm);
@@ -761,7 +761,7 @@ const app = {
         newTable.querySelector('a').setAttribute('data-table-id', tableId);
 
         // On ajoute les events listener
-        newTable.querySelector('a').addEventListener('click', app.showClickedTable);
+        newTable.querySelector('a').addEventListener('touchstart', app.showClickedTable);
 
         // On insère la table dans le DOM
         document.querySelector('.navbar-dropdown').appendChild(newTable);
@@ -827,9 +827,9 @@ const app = {
         newList.querySelector('.list').setAttribute('data-list-id', listId);
 
         // On ajoute les évènements
-        newList.querySelector('.button--add-card').addEventListener('click', app.showAddCardModal);
-        newList.querySelector('.button--delete-list').addEventListener('click', app.deleteListFromDOM);
-        newList.querySelector('.button--edit-list').addEventListener('click', app.showEditListForm);
+        newList.querySelector('.button--add-card').addEventListener('touchstart', app.showAddCardModal);
+        newList.querySelector('.button--delete-list').addEventListener('touchstart', app.deleteListFromDOM);
+        newList.querySelector('.button--edit-list').addEventListener('touchstart', app.showEditListForm);
         newList.querySelector('form').addEventListener('submit', app.handleEditListForm);
 
         // On ajoute le contenu permettant le drag & drop
@@ -860,10 +860,10 @@ const app = {
         newCard.querySelector('input[name="text_color"]').value = textColor;
 
         // On ajoute les évènements
-        newCard.querySelector('.button--delete-card').addEventListener('click', app.deleteCardFromDOM);
-        newCard.querySelector('.button--edit-card').addEventListener('click', app.showEditCardForm);
+        newCard.querySelector('.button--delete-card').addEventListener('touchstart', app.deleteCardFromDOM);
+        newCard.querySelector('.button--edit-card').addEventListener('touchstart', app.showEditCardForm);
         newCard.querySelector('form').addEventListener('submit', app.handleEditCardForm);
-        newCard.querySelector('.button--add-tag').addEventListener('click', app.showAddTagToCardModal);
+        newCard.querySelector('.button--add-tag').addEventListener('touchstart', app.showAddTagToCardModal);
 
         // On insère la carte dans le DOM
         document.querySelector(`[data-list-id="${listId}"]`).querySelector('.panel-block').appendChild(newCard);
@@ -882,7 +882,7 @@ const app = {
         newTag.querySelector('span').setAttribute('style', 'background-color: ' + backgroundColor + '; color: ' + textColor);
 
         // On ajoute les évènements
-        newTag.querySelector('.is-delete').addEventListener('click', app.deleteTagFromDOM);
+        newTag.querySelector('.is-delete').addEventListener('touchstart', app.deleteTagFromDOM);
 
         // On insère le tag dans le DOM
         document.querySelector(`[data-card-id="${cardId}"]`).querySelector('.is-grouped-multiline').appendChild(newTag);
@@ -1323,7 +1323,7 @@ const app = {
 
     addResponsiveBurgerEvent: () => {
         // On récupère le burger et on lui ajoute un event
-        document.querySelector('.navbar-burger').addEventListener('click', () => {
+        document.querySelector('.navbar-burger').addEventListener('touchstart', () => {
             // On ajoute la classe "is-active" sur les deux élements
             document.querySelector('.navbar-burger').classList.toggle('is-active');
             document.querySelector('.navbar-menu').classList.toggle('is-active');
