@@ -5,7 +5,3 @@ body {
     max-width: 100%;
     overflow-x: auto;
 }
-
-.index {
-    z-index: 99;
-}
