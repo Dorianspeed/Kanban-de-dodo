@@ -8,4 +8,5 @@ body {
 
 .pointer {
     pointer-events: initial;
+    cursor: pointer;
 }
