@@ -41,7 +41,7 @@ const loginController = {
 
             // Si aucun utilisateur trouvé, on envoie un message d'erreur
             if (!user) {
-                response.status(404).json('Le couple email / mot de passe ne concorde pas');
+                response.status(404).json('Le couple email / mot de passe ne correspond pas');
                 return;
             }
 
@@ -50,7 +50,7 @@ const loginController = {
 
             // Si les deux mots de passe ne concordent pas, on envoie un message d'erreur
             if(!validPassword) {
-                response.status(404).json('Le couple email / mot de passe ne concorde pas');
+                response.status(404).json('Le couple email / mot de passe ne correspond pas');
                 return;
             }
 
