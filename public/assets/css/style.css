@@ -6,6 +6,6 @@ body {
     overflow-x: auto;
 }
 
-form.is-hidden {
+.index {
     z-index: 99;
 }
