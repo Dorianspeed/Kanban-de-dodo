@@ -1199,11 +1199,16 @@ const app = {
                     button.classList.remove('is-hidden');
                 }
 
+                // Tri
+                table.lists.sort((a, b) => (a.position > b.position) ? 1 : ((b.position > a.position) ? -1 : 0));
+
                 // On crée les listes, les cartes et les tags
                 for (let list of table.lists) {
                     app.makeListInDOM(list.id, list.name);
 
                     if (list.cards) {
+                        // Tri
+                        list.cards.sort((a, b) => (a.position > b.position) ? 1 : ((b.position > a.position) ? -1 : 0));
                         for (let card of list.cards) {
                             app.makeCardInDOM(card.id, card.name, card.background_color, card.text_color, list.id);
 
