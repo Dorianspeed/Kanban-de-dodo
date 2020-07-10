@@ -274,6 +274,74 @@
             </form>
         </div>
     </div>
+
+    <div class="modal" id="editListModal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <form method="POST">
+                <header class="modal-card-head">
+                    <p class="modal-card-title">Modifier la liste</p>
+                    <button class="delete close" type="button" aria-label="close"></button>
+                </header>
+                <section class="modal-card-body">
+                    <div class="field">
+                        <label class="label">Nom</label>
+                        <div class="control has-icons-left">
+                            <input type="text" class="input is-info" name="name" value="" placeholder="Nom du tableau">
+                            <input type="hidden" name="list_id" value="">
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-pencil-alt"></i>
+                            </span>
+                        </div>
+                    </div>
+                </section>
+                <footer class="modal-card-foot">
+                    <button class="button is-info">Valider</button>
+                    <button class="button close" type="button">Annuler</button>
+                </footer>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="editCardModal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <form method="POST">
+                <header class="modal-card-head">
+                    <p class="modal-card-title">Modifier la carte</p>
+                    <button class="delete close" type="button" aria-label="close"></button>
+                </header>
+                <section class="modal-card-body">
+                    <div class="field">
+                        <label class="label">Nom</label>
+                        <div class="control has-icons-left">
+                            <input type="text" class="input is-info" name="name" value="" placeholder="Nom du tableau">
+                            <input type="hidden" name="card_id" value="">
+                            <span class="icon is-small is-left">
+                                <i class="fas fa-pencil-alt"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Couleur de fond</label>
+                        <div class="control">
+                            <input type="color" class="input is-info" name="background_color" value="#CCCCCC">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Couleur de texte</label>
+                        <div class="control">
+                            <input type="color" class="input is-info" name="text_color" value="#000000">
+                        </div>
+                    </div>
+                </section>
+                <footer class="modal-card-foot">
+                    <button class="button is-info">Valider</button>
+                    <button class="button close" type="button">Annuler</button>
+                </footer>
+            </form>
+        </div>
+    </div>
     
     <div class="modal" id="editTagModal">
         <div class="modal-background"></div>
@@ -391,17 +459,6 @@
                 <div class="columns">
                     <div class="column">
                         <h2 class="has-text-white"></h2>
-                        <form action="" method="POST" class="is-hidden">
-                            <div class="field has-addons">
-                                <div class="control">
-                                    <input type="text" class="input is-small" name="name" value="" placeholder="Nom de la liste">
-                                </div>
-                                <div class="control">
-                                    <button type="submit" class="button is-small is-success">Valider</button>
-                                </div>
-                                <input type="hidden" name="list-id" value="">
-                            </div>
-                        </form>
                     </div>
                     <div class="column is-narrow">
                         <a class="button--edit-list">
@@ -432,34 +489,6 @@
             <div class="columns">
                 <div class="column card-name">
                 </div>
-                <form action="" method="POST" class="is-hidden">
-                    <div class="field">
-                        <div class="control">
-                            <label>Nom
-                                <input type="text" class="input is-small" name="name" value="" placeholder="Nom de la carte">
-                            </label>
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="control">                        
-                            <label>Couleur de fond
-                                <input type="color" class="input is-small" name="background_color" value="#FFFFFF">
-                            </label>
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="control">                           
-                            <label>Couleur de texte
-                                <input type="color" class="input is-small" name="text_color" value="#000000">
-                            </label>
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="control">
-                            <button type="submit" class="button is-small is-success">Valider</button>
-                        </div>
-                    </div>
-                </form>
                 <div class="column is-narrow">
                     <a class="button--edit-card">
                         <span class="icon is-small has-text-primary">

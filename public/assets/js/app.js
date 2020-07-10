@@ -64,6 +64,12 @@ const app = {
         // Formulaire "Modifier un tableau"
         document.querySelector('#editTableModal form').addEventListener('submit', app.handleEditTableForm);
 
+        // Formulaire "Modifier une liste"
+        document.querySelector('#editListModal form').addEventListener('submit', app.handleEditListForm);
+
+        // Formulaire "Modifier un tag"
+        document.querySelector('#editCardModal form').addEventListener('submit', app.handleEditCardForm);
+
         // Formulaire "Modifier un tag"
         document.querySelector('#editTagModal form').addEventListener('submit', app.handleEditTagForm);
 
@@ -128,6 +134,53 @@ const app = {
         document.getElementById('editTableModal').classList.add('is-active');
     },
 
+    showEditListModal: (event) => {
+        // On récupère l'élément et l'id de la liste
+        let listElement = event.target.closest('.list');
+        let listId = listElement.getAttribute('data-list-id')
+
+        // On récupère les inputs de la modale
+        let inputName = document.getElementById('editListModal').querySelector('input[name="name"]');
+        let inputListId = document.getElementById('editListModal').querySelector('input[name="list_id"]');
+
+        // On change les valeurs
+        inputName.value = listElement.querySelector('h2').textContent;
+        inputListId.value = listId;
+
+        // On affiche la modale
+        document.getElementById('editListModal').classList.add('is-active');
+    },
+
+    showEditCardModal: (event) => {
+        // On récupère l'id de la liste
+        let cardElement = event.target.closest('.card');
+        let cardId = cardElement.getAttribute('data-card-id');
+
+        // Fonction permettant la conversion du rgb en hexadécimal (Stack Overflow)
+        const rgb2hex = (rgb) => {
+            rgb = rgb.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+            function hex(x) {
+                return ("0" + parseInt(x).toString(16)).slice(-2);
+            }
+            return "#" + hex(rgb[1]) + hex(rgb[2]) + hex(rgb[3]);
+        };
+
+        // On récupère les inputs de la modale
+        let inputName = document.getElementById('editCardModal').querySelector('input[name="name"]');
+        let inputCardId = document.getElementById('editCardModal').querySelector('input[name="card_id"]');
+        let inputBackgroundColor = document.getElementById('editCardModal').querySelector('input[name="background_color"]');
+        let inputTextColor = document.getElementById('editCardModal').querySelector('input[name="text_color"]');
+
+        // On change les valeurs
+        inputName.value = cardElement.querySelector('.card-name').textContent;
+        inputCardId.value = cardId;
+        inputBackgroundColor.value = rgb2hex(cardElement.style.backgroundColor);
+        inputTextColor.value = rgb2hex(cardElement.style.color);
+
+        // On affiche la modale
+        document.getElementById('editCardModal').classList.add('is-active');
+    },
+
     showEditTagModal: () => {
         // On affiche la modale
         document.getElementById('editTagModal').classList.add('is-active');
@@ -150,42 +203,6 @@ const app = {
     showDeleteTagModal: () => {
         // On affiche la modale
         document.getElementById('deleteTagModal').classList.add('is-active');
-    },
-
-    showEditListForm: (event) => {
-        // On récupère les élements
-        let listElement = event.target.closest('.list');
-        let formElement = listElement.querySelector('form');
-
-        // On met la valeur existante dans l'input
-        formElement.querySelector('input[name="name"]').value = listElement.querySelector('h2').textContent;
-
-        // On affiche le formulaire et on masque le h2
-        listElement.querySelector('h2').classList.add('is-hidden');
-        formElement.classList.remove('is-hidden');
-
-        // On cache les trois boutons
-        listElement.querySelector('.button--edit-list').classList.add('is-hidden');
-        listElement.querySelector('.button--delete-list').classList.add('is-hidden');
-        listElement.querySelector('.button--add-card').classList.add('is-hidden');
-    },
-
-    showEditCardForm: (event) => {
-        // On récupère les élements
-        let cardElement = event.target.closest('.card');
-        let formElement = cardElement.querySelector('form');
-
-        // On met la valeur existante dans l'input
-        formElement.querySelector('input[name="name"]').value = cardElement.querySelector('.card-name').textContent;
-
-        // On affiche le formulaire et on masque la div
-        cardElement.querySelector('.card-name').classList.add('is-hidden');
-        formElement.classList.remove('is-hidden');
-
-        // On cache les trois boutons
-        cardElement.querySelector('.button--edit-card').classList.add('is-hidden');
-        cardElement.querySelector('.button--delete-card').classList.add('is-hidden');
-        cardElement.querySelector('.button--add-tag').classList.add('is-hidden');
     },
 
     hideModals: () => {
@@ -495,8 +512,7 @@ const app = {
             let data = new FormData(event.target);
 
             // On récupère l'élément ciblé et l'id
-            let listElement = event.target.closest('.list');
-            let listId = listElement.getAttribute('data-list-id');
+            let listId = event.target.querySelector('input[name="list_id"]').value;
             
             // On fait la requête à l'API
             let response = await fetch (app.base_url + '/lists/' + listId, {
@@ -516,17 +532,11 @@ const app = {
                 let list = await response.json();
 
                 // On change le nom de la liste
-                listElement.querySelector('h2').textContent = list.name;
+                document.querySelector(`[data-list-id="${listId}"]`).querySelector('h2').textContent = list.name;
             }
 
-            // On affiche le h2 et on cache le formulaire
-            listElement.querySelector('h2').classList.remove('is-hidden');
-            listElement.querySelector('form').classList.add('is-hidden');
-
-            // On affiche les trois boutons
-            listElement.querySelector('.button--edit-list').classList.remove('is-hidden');
-            listElement.querySelector('.button--delete-list').classList.remove('is-hidden');
-            listElement.querySelector('.button--add-card').classList.remove('is-hidden');
+            // On ferme la modale
+            app.hideModals();
         }
 
         catch (error) {
@@ -544,8 +554,7 @@ const app = {
             let data = new FormData(event.target);
 
             // On récupère l'élément ciblé et l'id
-            let cardElement = event.target.closest('.card');
-            let cardId = cardElement.getAttribute('data-card-id');
+            let cardId = event.target.querySelector('input[name="card_id"]').value;
 
             // On fait la requête à l'API
             let response = await fetch (app.base_url + '/cards/' + cardId, {
@@ -565,18 +574,12 @@ const app = {
                 let card = await response.json();
 
                 // On définit les nouvelles valeurs
-                cardElement.querySelector('.card-name').textContent = card.name;
-                cardElement.setAttribute('style', 'background-color: ' + card.background_color + '; color: ' + card.text_color);
+                document.querySelector(`[data-card-id="${cardId}"]`).querySelector('.card-name').textContent = card.name;
+                document.querySelector(`[data-card-id="${cardId}"]`).setAttribute('style', 'background-color: ' + card.background_color + '; color: ' + card.text_color);
             }
 
-            // On affiche la div et on cache le formulaire
-            cardElement.querySelector('.card-name').classList.remove('is-hidden');
-            cardElement.querySelector('form').classList.add('is-hidden');
-
-            // On affiche les trois boutons
-            cardElement.querySelector('.button--edit-card').classList.remove('is-hidden');
-            cardElement.querySelector('.button--delete-card').classList.remove('is-hidden');
-            cardElement.querySelector('.button--add-tag').classList.remove('is-hidden');
+            // On ferme la modale
+            app.hideModals();
         }
 
         catch (error) {
@@ -841,9 +844,8 @@ const app = {
         newList.querySelector('.button--add-card').addEventListener('click', app.showAddCardModal);
         newList.querySelector('.button--delete-list').addEventListener('touchstart', app.deleteListFromDOM);
         newList.querySelector('.button--delete-list').addEventListener('click', app.deleteListFromDOM);
-        newList.querySelector('.button--edit-list').addEventListener('touchstart', app.showEditListForm);
-        newList.querySelector('.button--edit-list').addEventListener('click', app.showEditListForm);
-        newList.querySelector('form').addEventListener('submit', app.handleEditListForm);
+        newList.querySelector('.button--edit-list').addEventListener('touchstart', app.showEditListModal);
+        newList.querySelector('.button--edit-list').addEventListener('click', app.showEditListModal);
 
         // On ajoute le contenu permettant le drag & drop
         const container = newList.querySelector('.panel-block');
@@ -869,15 +871,12 @@ const app = {
         newCard.querySelector('.card-name').textContent = name;
         newCard.querySelector('.card').setAttribute('data-card-id', cardId);
         newCard.querySelector('.card').setAttribute('style', 'background-color: ' + backgroundColor + '; color: ' + textColor);
-        newCard.querySelector('input[name="background_color"]').value = backgroundColor;
-        newCard.querySelector('input[name="text_color"]').value = textColor;
 
         // On ajoute les évènements
         newCard.querySelector('.button--delete-card').addEventListener('touchstart', app.deleteCardFromDOM);
         newCard.querySelector('.button--delete-card').addEventListener('click', app.deleteCardFromDOM);
-        newCard.querySelector('.button--edit-card').addEventListener('touchstart', app.showEditCardForm);
-        newCard.querySelector('.button--edit-card').addEventListener('click', app.showEditCardForm);
-        newCard.querySelector('form').addEventListener('submit', app.handleEditCardForm);
+        newCard.querySelector('.button--edit-card').addEventListener('touchstart', app.showEditCardModal);
+        newCard.querySelector('.button--edit-card').addEventListener('click', app.showEditCardModal);
         newCard.querySelector('.button--add-tag').addEventListener('touchstart', app.showAddTagToCardModal);
         newCard.querySelector('.button--add-tag').addEventListener('click', app.showAddTagToCardModal);
 
