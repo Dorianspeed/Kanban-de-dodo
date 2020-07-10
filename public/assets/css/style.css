@@ -6,7 +6,6 @@ body {
     overflow-x: auto;
 }
 
-.pointer {
-    pointer-events: initial;
+.is-inline {
     cursor: pointer;
 }
