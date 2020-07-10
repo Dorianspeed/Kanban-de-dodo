@@ -5,7 +5,3 @@ body {
     max-width: 100%;
     overflow-x: auto;
 }
-
-.is-inline {
-    cursor: pointer;
-}
