@@ -229,7 +229,7 @@ const app = {
         }
 
         catch (error) {
-            alert('Impossible de créer le tableau');
+            alert(error);
             console.trace(error);
         }
     },
@@ -278,7 +278,7 @@ const app = {
         }
 
         catch (error) {
-            alert('Impossible de créer la liste');
+            alert(error);
             console.trace(error);
         }
     },
@@ -332,7 +332,7 @@ const app = {
         }
 
         catch (error) {
-            alert('Impossible de créer la carte');
+            alert(error);
             console.trace(error);
         }
     },
@@ -379,7 +379,7 @@ const app = {
         }
 
         catch (error) {
-            alert('Impossible de créer le tag');
+            alert(error);
             console.trace(error);
         }
     },
@@ -472,7 +472,7 @@ const app = {
         }
 
         catch (error) {
-            alert('Impossible de modifier le tableau');
+            alert(error);
             console.trace(error);
         }
     },
@@ -521,7 +521,7 @@ const app = {
         }
 
         catch (error) {
-            alert('Impossible de modifier la liste');
+            alert(error);
             console.trace(error);
         }
     },
@@ -571,7 +571,7 @@ const app = {
         }
 
         catch (error) {
-            alert('Impossible de modifier la carte');
+            alert(error);
             console.trace(error);
         }
     },
@@ -645,7 +645,7 @@ const app = {
         }
         
         catch (error) {
-            alert('Impossible de modifier le tag');
+            alert(error);
             console.trace(error);
         }
     },

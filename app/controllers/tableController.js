@@ -191,6 +191,7 @@ const tableController = {
             // On envoie le tableau en cas d'erreurs
             if (bodyErrors.length) {
                 response.status(400).json(bodyErrors);
+                return;
             }
 
             // On update les paramètres reçus
