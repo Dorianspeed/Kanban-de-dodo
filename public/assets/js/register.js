@@ -4,7 +4,7 @@ const app = {
         app.addResponsiveBurgerEvent();
     },
 
-    base_url: 'http://localhost:3000',
+    base_url: '',
 
     addListenerToActions: () => {
         // On ajoute un évènement sur le formulaire lors de sa soumission

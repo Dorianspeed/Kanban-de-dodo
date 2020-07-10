@@ -7,7 +7,7 @@ const app = {
         app.makeListsDroppable();
     },
 
-    base_url: 'http://localhost:3000',
+    base_url: '',
 
     addListenerToActions: () => {
         // Bouton "Ajouter un tableau"
