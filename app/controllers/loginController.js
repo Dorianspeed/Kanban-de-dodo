@@ -68,14 +68,11 @@ const loginController = {
     },
 
     disconnect: (request, response) => {
-        // On met détruit la session
+        // On détruit la session
         request.session.destroy();
 
         // On envoie un message au front
         response.status(200).json('ok');
-
-        // On redirige vers le login
-        location = '/login';
     }
 };
 
