@@ -12,6 +12,7 @@ Le Kanban de Dodo est un outil de type [Trello](https://trello.com/) permettant 
   - [Technologies utilisées](#technologies-utilisées)
   - [Initialisation du projet en local](#initialisation-du-projet-en-local)
   - [Mode d'emploi de l'application](#mode-demploi-de-lapplication)
+    - [Exemple d'utilisation](#exemple-dutilisation)
     - [Authentification / Inscription / Déconnexion](#authentification--inscription--déconnexion)
     - [Gestion des tableaux](#gestion-des-tableaux)
       - [Création de tableau](#création-de-tableau)
@@ -79,9 +80,15 @@ Dans le cas où vous souhaiteriez la tester en local, voici la procédure à sui
 2. Créer votre fichier `.env` en suivant le `.env.example`
 3. Installer tous les packages en utilisant la commande `npm install` dans votre terminal
 4. Exécuter la commande `npm run start` pour lancer l'application
-5. Lancer un navigateur puis entrer le lien `http://localhost:port` avec le port qui correspond à ce que vous avez indiqué dans votre `.env`
+5. Lancer un navigateur puis entrer le lien `http://localhost:port` où port correspond à ce que vous avez indiqué dans votre `.env`
 
 ## Mode d'emploi de l'application
+
+### Exemple d'utilisation
+
+Comme déjà dit au début de ce README, le Kanban de Dodo est un outil de type [Trello](https://trello.com/) permettant une gestion de projet(s). En voici un exemple afin de vous montrer les possibilités de celui-ci. Ici, nous verrons une simple gestion des tâches ménagères :
+
+![Exemple d'utilisation](./docs/pictures/exemple.png)
 
 ### Authentification / Inscription / Déconnexion
 
@@ -109,7 +116,7 @@ Un dernier point, si vous avez besoin de vous déconnecter, il suffit tout simpl
 
 Un tableau sera composé de plusieurs listes et cartes, chaque tableau étant indépendant l'un de l'autre. Vous pouvez donc créer autant de tableaux que vous aurez de projets à réaliser.
 
-Tout d'abord, commençons par ajouter notre premier tableau ! Pour se faire, cliquer sur le bouton "Ajouter un tableau", une fenêtre va s'ouvrir. Vous aurez donc la possibilité de choisir le nom de votre tableau et sa couleur de fond. Une fois ces deux choix faits, il ne reste plus qu'à appuyer sur "Valider".
+Tout d'abord, commençons par ajouter notre premier tableau ! Pour se faire, cliquer sur le bouton "Ajouter un tableau", une fenêtre va s'ouvrir. Vous aurez donc la possibilité de choisir le nom de votre tableau et sa couleur de fond. Une fois ces deux choix faits, il ne reste plus qu'à appuyer sur "Valider" pour confirmer.
 
 Si vous êtes arrivés ici par une erreur de clique, pas de panique. Il suffit de cliquer sur la petite croix en haut à droite de la fenêtre ou bien de tout simplement "Annuler" !
 
@@ -129,36 +136,105 @@ Enfin si vous souhaitez supprimer le tableau suite à une erreur de création ou
 
 ![Tous les boutons d'un tableau](./docs/pictures/table-buttons.png)
 
+![Modal "Modifier un tableau"](./docs/pictures/edit-table-form.png)
+
 ### Gestion des listes
 
 #### Création de liste
 
-Section à venir...
+Il est possible de créer plusieurs listes qui seront elles-mêmes composées de plusieurs cartes.
+
+Tout d'abord, après avoir créé votre tableau, vous aurez accès à de nouveaux boutons, vous pouvez créer votre première liste en appuyant sur le bouton "Ajouter une liste". A partir de là, une fenêtre s'ouvrira, vous n'aurez plus qu'à choisir le nom de votre nouvelle liste et appuyer sur "Valider" pour confirmer votre choix. Vous pouvez créer autant de listes que vous le souhaitez.
+
+De la même manière que sur les tableaux, si vous êtes arrivés ici par inadvertance, aucun souci il suffit de cliquer sur la petite croix en haut à droite de la fenêtre ou bien de tout simplement "Annuler".
+
+![Modal "Ajouter une liste"](./docs/pictures/add-list-form.png)
 
 #### Modification et suppression de liste
 
-Section à venir...
+Une fois votre liste créée, vous aurez accès à trois nouveaux boutons qui seront directement rattachés à cette dite liste.
+
+Le premier bouton "Crayon" vous permettra de modifier le nom de la liste. Pour se faire cliquer dessus, une fenêtre s'ouvrira et vous aurez accès à un formulaire vous donnant la possibilité de modifier le nom de la liste actuellement sélectionnée.
+
+Le deuxième bouton "Poubelle" vous permettra de supprimer **définitivement** la liste actuellement sélectionnée.
+
+Le troisième bouton "+" vous permettra d'ajouter des cartes à cette liste, mais nous y reviendrons dessus plus tard.
+
+![Boutons d'une liste](./docs/pictures/buttons-list.png)
+
+![Modal "Modifier une liste"](./docs/pictures/edit-list-form.png)
+
+Dernière chose à savoir sur les listes, celles-ci peuvent être positionnées à votre guise. Pour se faire il suffit de cliquer sur le bloc d'une liste et de la déplacer au sein des autres listes.
 
 ### Gestion des cartes
 
 #### Création de carte
 
-Section à venir...
+Il est possible de créer plusieurs cartes au sein d'une liste.
+
+Tout d'abord, vous pourrez ajouter des cartes au sein d'une liste en cliquant sur le bouton "+". Une fenêtre s'ouvrira vous offrant la possibilité de choisir le nom, la couleur de fond et la couleur de texte de votre carte. Pour confirmer votre choix, il ne reste plus qu'à appuyer sur le bouton "Valider". Vous pouvez créer autant de cartes que vous le souhaitez au sein d'une liste.
+
+De la même manière que sur les autres créations, si vous êtes arrivés ici suite à une erreur, il vous suffit de cliquer la petite croix en haut à droite de la fenêtre ou bien de tout simplement "Annuler".
+
+![Modal "Ajouter une carte"](./docs/pictures/add-card-form.png)
 
 #### Modification et suppression de carte
 
-Section à venir...
+Une fois votre carte créée, vous aurez accès à trois nouveaux boutons qui seront directement rattachés à cette dite carte.
+
+Le premier bouton "Crayon" vous permettra de modifier les propriétés de la carte. Pour se faire cliquer dessus, une fenêtre s'ouvrira et vous aurez accès à un formulaire vous donnant la possibilité de modifier le nom, la couleur de fond et la couleur de texte de la carte actuellement sélectionnée.
+
+Le deuxième bouton "Poubelle" vous permettra de supprimer **définitivement** la carte actuellement sélectionnée.
+
+Le troisième bouton "+" vous permettra d'ajouter des tags à cette liste, mais nous y reviendrons dessus plus tard.
+
+![Boutons d'une carte](./docs/pictures/card-buttons.png)
+
+![Modal "Modifier une carte"](./docs/pictures/edit-card-form.png)
+
+Dernière chose à savoir sur les cartes, celles-ci peuvent être glissées au sein d'une même liste mais aussi glissées dans une autre liste ! Pour se faire, cliquer sur la carte et déplacer là où bon vous semble.
 
 ### Gestion des tags
 
 #### Création de tag
 
-Section à venir...
+Il est possible de créer plusieurs tags qui pourront être rattachés à une ou plusieurs cartes dans les différents tableaux.
+
+Pour créer un tag, rien de plus simple, appuyer sur le bouton "Créer un tag", une fenêtre s'ouvrira vous offrant la possibilité de choisir le nom, la couleur de fond et la couleur de texte du tag. Pour confirmer la création, il suffit d'appuyer sur le bouton "Valider".
+
+Une fois votre tag créé, vous pourrez l'ajouter à n'importe quelle carte dans n'importe quel tableau !
+
+![Liste de boutons](./docs/pictures/list-of-buttons.png)
+
+![Modal "Ajouter un tag"](docs/pictures/add-tag-form.png)
 
 #### Modification et suppression de tag
 
-Section à venir...
+Vous pouvez ajouter un tag à une carte en cliquant sur le bouton "+" de celle-ci. Une fenêtre apparaîtra vous donnant accès à la liste de tous les tags que vous aurez créé. Vous n'avez plus qu'à sélectionner le tag qui vous intéresse et appuyer sur le bouton "Valider" pour confirmer votre choix. Vous avez la possibilité d'ajouter **plusieurs tags** sur une seule et même carte.
+
+![Modal permettant l'ajout d'un tag à une carte](./docs/pictures/add-tag.png)
+
+Pour modifier un tag existant, il vous suffit de cliquer sur le bouton "Modifier un tag" qui vous ouvrira une fenêtre. Dans celle-ci, vous aurez accès à une liste déroulante contenant tous les tags déjà créés. Vous n'avez plus qu'à sélectionner celui que vous souhaitez modifier et changer les champs qui vous intéresse. Une fois vos choix faits, il ne reste plus qu'à appuyer sur le bouton "Valider" pour confirmer votre choix.
+
+![Modal "Modifier un tag"](./docs/pictures/edit-tag-form.png)
+
+Vous pouvez supprimer un tag appartenant à une carte en appuyant sur la croix du dit tag. Cette suppression n'est pas définitive, elle ne fait que retirer le tag de la carte sélectionnée.
+
+![Croix permettant la suppression du tag d'une carte](./docs/pictures/tag-button.png)
+
+Si vous voulez supprimer **définitivement** un tag, il vous suffit de cliquer sur le bouton "Supprimer un tag". Une fenêtre apparaîtra vous donnant la possibilité de choisir le tag à supprimer via une liste déroulante. Il ne vous reste plus qu'à appuyer sur le bouton "Valider" pour confirmer votre choix. **Cela supprimera le dit tag sur toutes les cartes de tous les tableaux.**
+
+![Modal "Supprimer un tag"](./docs/pictures/delete-tag-form.png)
 
 ### Utilisation sur mobile / tablette
 
-Section à venir...
+L'utilisation est identique sur mobile et tablette. La seule chose qui change vis-à-vis d'une version bureautique, c'est l'affichage :
+
+- Sur tablette, nous sommes sur une lisibilité de trois listes
+- Sur mobile, nous sommes sur une lisibilité d'une seule liste
+- Sur tablette et mobile, le menu horizontal est remplacé par un menu de type "burger"
+
+Pour afficher le menu, cliquer sur le menu burger (les trois barres horizontales) en haut à droite de votre écran. Cela affichera donc les diverses options que vous connaissez déjà. Enfin, pour fermer le menu, cliquer sur la croix présente en haut à droite de votre écran.
+
+![Menu burger](./docs/pictures/burger-menu.png)
+![Menu burger ouvert](./docs/pictures/opened-burger-menu.png)
