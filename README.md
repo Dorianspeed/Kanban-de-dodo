@@ -2,7 +2,7 @@
 
 Le Kanban de Dodo est un outil de type [Trello](https://trello.com/) permettant une gestion de projet(s).
 
-- Lien vers l'application : [Kanban de Dodo](http://54.236.33.34/)
+- Lien vers l'application : [Kanban de Dodo](https://kanban-de-dodo.herokuapp.com/)
 
 ## Sommaire
 
@@ -71,7 +71,7 @@ Outils utilisés en front (**langages HTML / CSS / JavaScript**) :
 
 ## Initialisation du projet en local
 
-L'application se trouve en ligne et est utilisable à ce lien : [Kanban de Dodo](http://54.236.33.34/).
+L'application se trouve en ligne et est utilisable à ce lien : [Kanban de Dodo](https://kanban-de-dodo.herokuapp.com/).
 Dans le cas où vous souhaiteriez la tester en local, voici la procédure à suivre :
 
 1. Créer votre base de données sous PostgreSQL
@@ -92,7 +92,7 @@ Comme déjà dit au début de ce README, le Kanban de Dodo est un outil de type 
 
 ### Authentification / Inscription / Déconnexion
 
-Lien de l'application : [Kanban de Dodo](http://54.236.33.34/).
+Lien de l'application : [Kanban de Dodo](https://kanban-de-dodo.herokuapp.com/).
 
 Si c'est la première fois que vous arrivez sur l'application, la première chose à faire est de s'inscrire.
 
